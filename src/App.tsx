@@ -1,13 +1,9 @@
-import { Button } from "./components/ui/button"
-import LoginPage from "./pages/login"
+import AppRouter from "./routes/AppRouter";
 
 function App() {
 
-  return (
-    <>
-    <LoginPage/>
-    </>
-  )
+  return <AppRouter />;
+
 }
 
 export default App
