@@ -40,12 +40,9 @@ export default function DashboardLayout({ children }: { children?: ReactNode }) 
           </div>
 
           <div className="flex items-center gap-2">
-            <Button
-              variant="ghost"
-              size="icon"
+            <Button variant="ghost" size="icon"
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              aria-label="Alternar tema claro/escuro"
-            >
+              aria-label="Alternar tema claro/escuro">
               {theme === "dark" ? (
                 <Sun className="h-5 w-5" />
               ) : (
