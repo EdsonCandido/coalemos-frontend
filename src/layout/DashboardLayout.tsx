@@ -5,12 +5,20 @@ import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbP
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import { Moon, Sun } from "lucide-react";
 import { type ReactNode } from "react";
 import { Outlet } from "react-router-dom";
 
 export default function DashboardLayout({ children }: { children?: ReactNode }) {
   const { theme, setTheme } = useTheme();
+
+  const breadcrumbs = useBreadcrumbs({
+    "/dashboard": "Painel",
+    "/dashboard/profile": "Meu Perfil",
+    "/login": "Acessar",
+    "/register": "Criar Conta",
+  });
 
   // const [mounted, setMounted] = useState(false);
   // useEffect(() => setMounted(true), []);
@@ -26,7 +34,7 @@ export default function DashboardLayout({ children }: { children?: ReactNode }) 
               orientation="vertical"
               className="mr-2 data-[orientation=vertical]:h-4"
             />
-            <Breadcrumb>
+            {/* <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem className="hidden md:block">
                   <BreadcrumbLink href="#">Resumo</BreadcrumbLink>
@@ -36,8 +44,31 @@ export default function DashboardLayout({ children }: { children?: ReactNode }) 
                   <BreadcrumbPage>Home</BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
+            </Breadcrumb> */}
+            <Breadcrumb>
+              <BreadcrumbList>
+                {breadcrumbs.map((item, index) => {
+                  const isLast = index === breadcrumbs.length - 1;
+                  return (
+                    <>
+                      <BreadcrumbItem key={item.path} className="hidden md:block">
+                        {isLast ? (
+                          <BreadcrumbPage>{item.label}</BreadcrumbPage>
+                        ) : (
+                          <BreadcrumbLink href={item.path}>{item.label}</BreadcrumbLink>
+
+                        )}
+                      </BreadcrumbItem>
+                      {isLast ? '' :<BreadcrumbSeparator className="hidden md:block" />}
+                    </>
+                  );
+                })}
+              </BreadcrumbList>
             </Breadcrumb>
           </div>
+
+
+
 
           <div className="flex items-center gap-2">
             <Button variant="ghost" size="icon"
