@@ -2,11 +2,11 @@ import * as React from "react"
 import {
   Bot,
   Frame,
-  GalleryVerticalEnd,
   Map,
   PieChart,
   Settings2,
   SquareTerminal,
+  Users,
 } from "lucide-react"
 
 import { NavMain } from "@/components/nav-main"
@@ -49,6 +49,18 @@ const data = {
       ],
     },
     {
+      title: "Clientes",
+      url: "#",
+      icon: Users,
+      isActive: true,
+      items: [
+        {
+          title: "Todos os clientes",
+          url: "/dashboard/clients",
+        },
+      ],
+    },
+    {
       title: "Relatórios",
       url: "#",
       icon: Bot,
@@ -67,29 +79,6 @@ const data = {
         },
       ],
     },
-    // {
-    //   title: "Documentation",
-    //   url: "#",
-    //   icon: BookOpen,
-    //   items: [
-    //     {
-    //       title: "Introduction",
-    //       url: "#",
-    //     },
-    //     {
-    //       title: "Get Started",
-    //       url: "#",
-    //     },
-    //     {
-    //       title: "Tutorials",
-    //       url: "#",
-    //     },
-    //     {
-    //       title: "Changelog",
-    //       url: "#",
-    //     },
-    //   ],
-    // },
     {
       title: "Settings",
       url: "#",
@@ -137,7 +126,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        <TeamSwitcher  />
+        <TeamSwitcher />
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
