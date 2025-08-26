@@ -1,41 +1,91 @@
 "use client"
 
-import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerFooter, DrawerClose } from "@/components/ui/drawer"
+import { useEffect, useState } from "react"
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerFooter,
+  DrawerClose,
+} from "@/components/ui/drawer"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { useState } from "react"
+import Loading from "@/components/loading"
 
 interface ClientFormProps {
   open: boolean
   onClose: () => void
   onSubmit: (data: { name: string; email: string }) => void
-  initialData?: { name: string; email: string }
+  codSearch?: number
 }
 
-export function ClientForm({ open, onClose, onSubmit, initialData }: ClientFormProps) {
-  const [name, setName] = useState(initialData?.name ?? "")
-  const [email, setEmail] = useState(initialData?.email ?? "")
+export function ClientForm({
+  open,
+  onClose,
+  onSubmit,
+  codSearch,
+}: ClientFormProps) {
+  const [loadingPage, setLoadingPage] = useState(false);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
 
   function handleSave() {
     onSubmit({ name, email })
+    handleClose()
+  }
+
+  const handleClose = () => {
+    setName("")
+    setEmail("")
     onClose()
   }
 
+  const onInit = async () => {
+    setLoadingPage(true);
+    if (codSearch) {
+      setName("Cliente Exemplo")
+      setEmail("zSjyX@example.com")
+    }
+    setTimeout(() => {
+      setLoadingPage(false);
+    }, 1000);
+  }
+
+  useEffect(() => {
+    if (open) {
+      onInit()
+    }
+  }, [open]);
+
   return (
-    <Drawer open={open} onOpenChange={onClose}>
-      <DrawerContent className="fixed right-0 top-0 h-full w-96 p-4">
+    <Drawer direction="left" dismissible={false} open={open} onOpenChange={handleClose}>
+      <DrawerContent
+        style={{ width: '30vw', maxWidth: "100%" }}
+        className="p-4 w-full md:w-auto"
+      >
         <DrawerHeader>
-          <DrawerTitle>{initialData ? "Editar Cliente" : "Novo Cliente"}</DrawerTitle>
+          <DrawerTitle>{codSearch ? "Editar Cliente" : "Novo Cliente"}</DrawerTitle>
         </DrawerHeader>
-        <div className="space-y-4">
-          <Input placeholder="Nome" value={name} onChange={e => setName(e.target.value)} />
-          <Input placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
-        </div>
-        <DrawerFooter className="flex justify-end gap-2 pt-6">
-          <DrawerClose asChild>
-            <Button variant="outline">Cancelar</Button>
-          </DrawerClose>
-          <Button onClick={handleSave}>Salvar</Button>
+
+        {
+          loadingPage ? <Loading text="Carregando..." /> : (
+            <div className="space-y-4 mt-2">
+              <Input placeholder="Nome" value={name} onChange={e => setName(e.target.value)} />
+              <Input placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
+            </div>
+          )
+        }
+
+
+
+        <DrawerFooter className="pt-6">
+          <div className="flex justify-end gap-2">
+            <DrawerClose asChild>
+              <Button variant="outline" onClick={handleClose}>Cancelar</Button>
+            </DrawerClose>
+            <Button onClick={handleSave}>Salvar</Button>
+          </div>
         </DrawerFooter>
       </DrawerContent>
     </Drawer>
