@@ -1,12 +1,13 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 
 import { ClientsTable, type Client } from "@/components/dashboard/client/clients-table"
 import { ClientForm } from "@/components/dashboard/client/client-form"
 
 export default function ClientsPage() {
+  const [codSearch,] = useState<number | null>(null);
   const [clients, setClients] = useState<Client[]>([
     { id: 1, name: "João Silva", email: "joao@email.com" },
     { id: 2, name: "Maria Souza", email: "maria@email.com" },
@@ -24,6 +25,14 @@ export default function ClientsPage() {
     }
     setEditingClient(null)
   }
+
+  const onInit = async () => {
+    console.log("codSearch", codSearch)
+  }
+
+  useEffect(() => {
+    void onInit();
+  }, []);
 
   return (
     <div className="p-6">
@@ -45,7 +54,7 @@ export default function ClientsPage() {
           setEditingClient(null)
         }}
         onSubmit={handleAdd}
-        initialData={editingClient ?? undefined}
+        codSearch={codSearch}
       />
     </div>
   )
