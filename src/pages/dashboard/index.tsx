@@ -1,3 +1,5 @@
+import { memo } from "react";
+
 const DashboardHome = () => {
     // return (
     // <div className="grid auto-rows-min gap-4 md:grid-cols-3">
@@ -17,4 +19,4 @@ const DashboardHome = () => {
         </div>
     );
 }
-export default DashboardHome
+export default memo(DashboardHome)
