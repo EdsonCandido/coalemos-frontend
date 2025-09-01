@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, } from "react-router-dom";
 import NotFound from "@/pages/NotFound";
 import AuthLayout from "@/layout/AuthLayout";
 import DashboardLayout from "@/layout/DashboardLayout";
@@ -13,8 +13,6 @@ import ClientsPage from "@/pages/dashboard/client";
 
 export default function AppRouter() {
 
-    const isAuthenticated = !!localStorage.getItem("token");
-
     return (
         <BrowserRouter>
             <Routes>
@@ -22,6 +20,7 @@ export default function AppRouter() {
                     <Route element={<AuthLayout />}>
                         <Route path="/login" element={<Login />} />
                         <Route path="/register" element={<Register />} />
+                        
                     </Route>
                 </Route>
 
@@ -31,16 +30,12 @@ export default function AppRouter() {
                         <Route path="/dashboard" element={<DashboardHome />} />
                         <Route path="/dashboard/profile" element={<Profile />} />
                         <Route path="/dashboard/clients" element={<ClientsPage />} />
-                        
+                         <Route path="*" element={<NotFound />} />
+
                     </Route>
                 </Route>
 
-                <Route
-                    path="*"
-                    element={
-                        isAuthenticated ? <NotFound /> : <Navigate to="/login" replace />
-                    }
-                />
+                <Route path="*" element={<NotFound />} />
             </Routes>
         </BrowserRouter>
     );

@@ -1,8 +1,19 @@
-
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom"
+import { useAuth } from "@/hooks/use-auth"
+import { useEffect, useState } from "react"
 
 export default function PrivateRoute() {
-  const isAuthenticated = !!localStorage.getItem("token");
+  const { isAuthenticated, refreshTokenIfNeeded } = useAuth()
+  const [loading, setLoading] = useState(true)
 
-  return isAuthenticated ? <Outlet /> : <Navigate to="/login" replace />;
+  useEffect(() => {
+    async function check() {
+      await refreshTokenIfNeeded()
+      setLoading(false)
+    }
+    check()
+  }, [])
+
+  if (loading) return <div>Carregando...</div>
+  return isAuthenticated ? <Outlet /> : <Navigate to="/login" replace />
 }
