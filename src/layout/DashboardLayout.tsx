@@ -5,7 +5,7 @@ import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbP
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
+import { useBreadcrumbs } from "@/hooks/use-breadcrumbs";
 import { Moon, Sun } from "lucide-react";
 import { type ReactNode } from "react";
 import { Outlet } from "react-router-dom";
