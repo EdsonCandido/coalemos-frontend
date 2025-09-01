@@ -30,16 +30,12 @@ const data = {
   navMain: [
     {
       title: "Financeiro",
-      url: "#",
+      url: "/dashboard/finance-summary",
       icon: SquareTerminal,
       isActive: true,
       items: [
         {
-          title: "History",
-          url: "#",
-        },
-        {
-          title: "Starred",
+          title: "Contas",
           url: "#",
         },
         {

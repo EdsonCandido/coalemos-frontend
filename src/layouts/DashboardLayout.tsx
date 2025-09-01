@@ -1,8 +1,8 @@
 
 import { AppSidebar } from "@/components/app-sidebar";
 import { useTheme } from "@/components/theme-provider";
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
+import ResponsiveBreadcrumbs from "@/components/ui/responsive-breadcrumbs";
 import { Separator } from "@/components/ui/separator";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { useBreadcrumbs } from "@/hooks/use-breadcrumbs";
@@ -16,6 +16,7 @@ export default function DashboardLayout({ children }: { children?: ReactNode }) 
   const breadcrumbs = useBreadcrumbs({
     "/dashboard": "Painel",
     "/dashboard/profile": "Meu Perfil",
+    '/dashboard/finance-summary': 'Resumo Financeiro',
     "/login": "Acessar",
     "/register": "Criar Conta",
   });
@@ -45,31 +46,8 @@ export default function DashboardLayout({ children }: { children?: ReactNode }) 
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb> */}
-            <Breadcrumb>
-              <BreadcrumbList>
-                {breadcrumbs.map((item, index) => {
-                  const isLast = index === breadcrumbs.length - 1;
-                  return (
-                    <>
-                      <BreadcrumbItem key={item.path} className="hidden md:block">
-                        {isLast ? (
-                          <BreadcrumbPage>{item.label}</BreadcrumbPage>
-                        ) : (
-                          <BreadcrumbLink href={item.path}>{item.label}</BreadcrumbLink>
-
-                        )}
-                      </BreadcrumbItem>
-                      {isLast ? '' :<BreadcrumbSeparator className="hidden md:block" />}
-                    </>
-                  );
-                })}
-              </BreadcrumbList>
-            </Breadcrumb>
+           <ResponsiveBreadcrumbs breadcrumbs={breadcrumbs} />
           </div>
-
-
-
-
           <div className="flex items-center gap-2">
             <Button variant="ghost" size="icon"
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
