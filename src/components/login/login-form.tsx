@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useNavigate } from "react-router-dom"
+import { useAuth } from "@/hooks/use-auth"
 
 export function LoginForm({
   className,
@@ -12,8 +13,13 @@ export function LoginForm({
 
     const navigate = useNavigate();
 
-  function handleLogin() {
-    localStorage.setItem("token", "fake-token");
+    const {login} = useAuth();
+
+  async function handleLogin() {
+    const response = new Promise((resolve) => setTimeout(resolve, 1000));
+    await response;
+    
+    login( "dummy-token", "dummy-refresh-token", { id: "1", name: "John Doe", email: "m@example.com" });
     navigate("/dashboard");
   }
   return (
