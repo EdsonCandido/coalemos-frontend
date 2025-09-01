@@ -1,5 +1,5 @@
 import * as React from "react"
-import { cn } from "@/lib/utils"
+import { cn } from "@/libs/utils"
 import { Loader2 } from "lucide-react"
 
 type InputProps = React.ComponentProps<"input"> & {
