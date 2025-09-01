@@ -12,7 +12,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import Loading from "@/components/loading"
-import { useDebounce } from "@/hooks/useDebounce"
+import { useDebounce } from "@/hooks/use-debounce"
 import { formatCep } from "@/lib/utils"
 
 interface ClientFormProps {
