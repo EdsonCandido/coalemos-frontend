@@ -10,6 +10,7 @@ import DashboardHome from "@/pages/dashboard";
 import Profile from "@/pages/dashboard/profile";
 import PublicRoute from "./PublicRoute";
 import ClientsPage from "@/pages/dashboard/client";
+import FinanceSummary from "@/pages/dashboard/finance-summary";
 
 export default function AppRouter() {
 
@@ -28,6 +29,7 @@ export default function AppRouter() {
                 <Route element={<PrivateRoute />}>
                     <Route element={<DashboardLayout />}>
                         <Route path="/dashboard" element={<DashboardHome />} />
+                        <Route path="/dashboard/finance-summary" element={<FinanceSummary />} />
                         <Route path="/dashboard/profile" element={<Profile />} />
                         <Route path="/dashboard/clients" element={<ClientsPage />} />
                          <Route path="*" element={<NotFound />} />

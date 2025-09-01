@@ -14,6 +14,6 @@ export default function PrivateRoute() {
     check()
   }, [])
 
-  if (loading) return <div>Carregando...</div>
+  if (loading) return <div>Carregando ...</div>
   return isAuthenticated ? <Outlet /> : <Navigate to="/login" replace />
 }
