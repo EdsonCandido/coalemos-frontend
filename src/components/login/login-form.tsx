@@ -1,32 +1,58 @@
-import { cn } from "@/libs/utils"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { useNavigate } from "react-router-dom"
-import { useAuth } from "@/hooks/use-auth"
+import { cn } from "@/libs/utils";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/hooks/use-auth";
+import type { FormEvent, FormValues } from "react";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+
+const schema = z.object({
+  login: z.string().email("Formato de e-mail inválido"),
+  senha: z.string().min(5, "A senha deve ter pelo menos 6 caracteres"),
+});
+
+type LoginFormData = z.infer<typeof schema>;
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  const navigate = useNavigate();
+  const { login } = useAuth();
 
-    const navigate = useNavigate();
-
-    const {login} = useAuth();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<LoginFormData>({
+    resolver: zodResolver(schema),
+    mode: "onSubmit",
+  });
 
   async function handleLogin() {
     const response = new Promise((resolve) => setTimeout(resolve, 1000));
     await response;
-    
-    login( "dummy-token", "dummy-refresh-token", { id: "1", name: "John Doe", email: "m@example.com" });
+
+    login("dummy-token", "dummy-refresh-token", {
+      id: "1",
+      name: "John Doe",
+      email: "m@example.com",
+    });
     navigate("/dashboard");
   }
+
+  const onSubmit = (e: FormValues) => {
+    console.log(e);
+  };
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card className="overflow-hidden p-0">
         <CardContent className="grid p-0 md:grid-cols-2">
-          <form className="p-6 md:p-8">
+          <form className="p-6 md:p-8" onSubmit={handleSubmit(onSubmit)}>
             <div className="flex flex-col gap-6">
               <div className="flex flex-col items-center text-center">
                 <h1 className="text-2xl font-bold">Bem vindo de volta 👋</h1>
@@ -35,13 +61,20 @@ export function LoginForm({
                 </p> */}
               </div>
               <div className="grid gap-3">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="login">Email</Label>
                 <Input
-                  id="email"
+                  {...register("login")}
+                  id="login"
                   type="email"
+                  isLoading={isSubmitting}
                   placeholder="m@example.com"
                   required
                 />
+                {errors.login && (
+                  <span className="text-sm text-destructive">
+                    {errors.login.message}
+                  </span>
+                )}
               </div>
               <div className="grid gap-3">
                 <div className="flex items-center">
@@ -53,9 +86,20 @@ export function LoginForm({
                     Esqueceu a senha?
                   </a>
                 </div>
-                <Input id="password" type="password" required />
+                <Input
+                  {...register("senha")}
+                  id="password"
+                  isLoading={isSubmitting}
+                  type="password"
+                  required
+                />
+                {errors.senha && (
+                  <span className="text-sm text-destructive">
+                    {errors.senha.message}
+                  </span>
+                )}
               </div>
-              <Button type="submit" className="w-full" onClick={handleLogin}>
+              <Button type="submit" className="w-full">
                 Login
               </Button>
             </div>
@@ -70,8 +114,9 @@ export function LoginForm({
         </CardContent>
       </Card>
       <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
-       Desenvolvido por  <a href="#">&copy;ZukoSoftware</a> {new Date().getFullYear()}{" "}
+        Desenvolvido por <a href="#">&copy;ZukoSoftware</a>{" "}
+        {new Date().getFullYear()}{" "}
       </div>
     </div>
-  )
+  );
 }
