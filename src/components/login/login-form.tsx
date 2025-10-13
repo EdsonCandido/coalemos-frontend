@@ -10,7 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
 const schema = z.object({
-  login: z.string().email("Formato de e-mail inválido"),
+  login: z.email("Formato de e-mail inválido"),
   senha: z.string().min(5, "A senha deve ter pelo menos 6 caracteres"),
 });
 
