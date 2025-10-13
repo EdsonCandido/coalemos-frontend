@@ -5,7 +5,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/use-auth";
-import type { FormEvent, FormValues } from "react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -33,19 +32,16 @@ export function LoginForm({
     mode: "onSubmit",
   });
 
-  async function handleLogin() {
+  const onSubmit = async (e: LoginFormData) => {
     const response = new Promise((resolve) => setTimeout(resolve, 1000));
     await response;
 
     login("dummy-token", "dummy-refresh-token", {
       id: "1",
-      name: "John Doe",
-      email: "m@example.com",
+      name: "Edson",
+      login: e.login,
     });
     navigate("/dashboard");
-  }
-
-  const onSubmit = (e: FormValues) => {
     console.log(e);
   };
   return (
@@ -99,7 +95,7 @@ export function LoginForm({
                   </span>
                 )}
               </div>
-              <Button type="submit" className="w-full">
+              <Button type="submit" className="w-full" isLoading={isSubmitting}>
                 Login
               </Button>
             </div>
