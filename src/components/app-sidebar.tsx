@@ -1,4 +1,4 @@
-import * as React from "react"
+import * as React from "react";
 import {
   Bot,
   Frame,
@@ -7,20 +7,19 @@ import {
   Settings2,
   SquareTerminal,
   Users,
-} from "lucide-react"
+} from "lucide-react";
 
-import { NavMain } from "@/components/nav-main"
-import { NavUser } from "@/components/nav-user"
-import { TeamSwitcher } from "@/components/team-switcher"
+import { NavMain } from "@/components/nav-main";
+import { NavUser } from "@/components/nav-user";
+import { TeamSwitcher } from "@/components/team-switcher";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
   SidebarRail,
-} from "@/components/ui/sidebar"
+} from "@/components/ui/sidebar";
 
-// This is sample data.
 const data = {
   user: {
     name: "Edson",
@@ -33,20 +32,10 @@ const data = {
       url: "/dashboard/finance-summary",
       icon: SquareTerminal,
       isActive: true,
-      items: [
-        {
-          title: "Contas",
-          url: "#",
-        },
-        {
-          title: "Settings",
-          url: "#",
-        },
-      ],
     },
     {
       title: "Clientes",
-      url: "#",
+      url: "/dashboard/clients",
       icon: Users,
       isActive: true,
       items: [
@@ -116,7 +105,7 @@ const data = {
       icon: Map,
     },
   ],
-}
+};
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
@@ -133,5 +122,5 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
-  )
+  );
 }

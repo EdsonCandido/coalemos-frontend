@@ -1,12 +1,12 @@
-"use client"
+"use client";
 
-import { ChevronRight, TrendingUp, type LucideIcon } from "lucide-react"
+import { ChevronRight, TrendingUp, type LucideIcon } from "lucide-react";
 
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "@/components/ui/collapsible"
+} from "@/components/ui/collapsible";
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -16,22 +16,18 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
-} from "@/components/ui/sidebar"
-import { Link } from "react-router-dom"
+} from "@/components/ui/sidebar";
+import { Link } from "react-router-dom";
 
 export function NavMain({
   items,
 }: {
   items: {
-    title: string
-    url: string
-    icon?: LucideIcon
-    isActive?: boolean
-    items?: {
-      title: string
-      url: string
-    }[]
-  }[]
+    title: string;
+    url: string;
+    icon?: LucideIcon;
+    isActive?: boolean;
+  }[];
 }) {
   return (
     <SidebarGroup>
@@ -39,11 +35,11 @@ export function NavMain({
 
       <SidebarMenu>
         <SidebarMenuItem>
-          <SidebarMenuButton tooltip="Dashboard" >
+          <SidebarMenuButton tooltip="Dashboard">
             <Link to="/dashboard">
               <div className="flex items-center gap-2">
                 <TrendingUp className="h-4 w-4" />
-                <span>{'Dashboard'}</span>
+                <span>{"Dashboard"}</span>
               </div>
             </Link>
           </SidebarMenuButton>
@@ -66,17 +62,14 @@ export function NavMain({
                   ) : (
                     <span>{item.title}</span>
                   )}
-                  <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                  {/*<ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />*/}
                 </SidebarMenuButton>
               </CollapsibleTrigger>
-              <CollapsibleContent>
+              {/*<CollapsibleContent>
                 <SidebarMenuSub>
                   {item.items?.map((subItem) => (
                     <SidebarMenuSubItem key={subItem.title}>
                       <SidebarMenuSubButton asChild>
-                        {/* <a href={subItem.url}>
-                          <span>{subItem.title}</span>
-                        </a> */}
                         <Link to={subItem.url}>
                           <span>{subItem.title}</span>
                         </Link>
@@ -84,11 +77,11 @@ export function NavMain({
                     </SidebarMenuSubItem>
                   ))}
                 </SidebarMenuSub>
-              </CollapsibleContent>
+              </CollapsibleContent>*/}
             </SidebarMenuItem>
           </Collapsible>
         ))}
       </SidebarMenu>
     </SidebarGroup>
-  )
+  );
 }

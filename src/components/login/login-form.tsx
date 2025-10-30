@@ -33,15 +33,9 @@ export function LoginForm({
   });
 
   const onSubmit = async (e: LoginFormData) => {
-    const response = new Promise((resolve) => setTimeout(resolve, 1000));
-    await response;
+    const isSuccess = await login({ login: e.login, password: e.senha });
 
-    login("dummy-token", "dummy-refresh-token", {
-      id: "1",
-      name: "Edson",
-      login: e.login,
-    });
-    navigate("/dashboard");
+    if (isSuccess) navigate("/dashboard");
     console.log(e);
   };
   return (
