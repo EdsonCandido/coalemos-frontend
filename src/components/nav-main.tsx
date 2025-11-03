@@ -36,7 +36,7 @@ export function NavMain({
       <SidebarMenu>
         <SidebarMenuItem>
           <SidebarMenuButton tooltip="Dashboard">
-            <Link to="/dashboard">
+            <Link to="/">
               <div className="flex items-center gap-2">
                 <TrendingUp className="h-4 w-4" />
                 <span>{"Dashboard"}</span>
