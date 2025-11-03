@@ -1,11 +1,11 @@
 import { lazy, Suspense } from "react";
 import { Navigate, Route, Routes } from "react-router";
-import useAuth from "../hooks/auth";
 
 import LoginPage from "../view/login";
 import LoadingPage from "../view/loading";
 import NotFound from "../view/not-found";
 import DashboardLayout from "../layout/dashboardLayout";
+import { useAuth } from "@/stores/auth-store";
 
 const AdminSettingslazy = lazy(() => import("../view/admin/settings"));
 const UsersAdminLazy = lazy(() => import("../view/admin/users"));
@@ -23,16 +23,16 @@ type IProps = {
 };
 
 const RoutesAplication = () => {
-  const { user, signOut } = useAuth();
+  const { usuario, logout, isAuthenticated } = useAuth();
 
   const Autenticate = ({ children, isAdmin }: IProps) => {
     let errAccess = false;
-    if (!user) errAccess = true;
+    if (!isAuthenticated) errAccess = true;
 
-    if (isAdmin && user?.is_admin === 0) errAccess = true;
+    if (isAdmin && usuario?.cod === 1) errAccess = true;
 
     if (errAccess) {
-      signOut();
+      logout();
       return <Navigate to="/login" replace />;
     }
     return children;

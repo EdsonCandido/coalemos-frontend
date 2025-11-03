@@ -14,8 +14,8 @@ import {
   Drawer,
   DrawerContent,
   useDisclosure,
-  BoxProps,
-  FlexProps,
+  type BoxProps,
+  type FlexProps,
   Menu,
   MenuButton,
   MenuDivider,
@@ -25,11 +25,11 @@ import {
   Divider,
 } from "@chakra-ui/react";
 import { FiSettings, FiMenu, FiBell, FiChevronDown } from "react-icons/fi";
-import { IconType } from "react-icons";
+import type { IconType } from "react-icons";
 import { AiOutlineUser } from "react-icons/ai";
 
-import useAuth from "../../hooks/auth";
 import { GrMoney } from "react-icons/gr";
+import { useAuth } from "@/stores/auth-store";
 
 // import logoSvg from '../../assets/logo/AABB-azul.svg'
 // import logoSvgAmarela from '../../assets/logo/AABB-amarelo.svg'
@@ -64,7 +64,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
         {/* <Image src={logoSvg} alt="Logo" w={'100%'} h={'100%'} /> */}
         <Text as="strong" fontSize={"18px"}>
-          HEFESTO
+          COALEMOS
         </Text>
 
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
@@ -143,7 +143,7 @@ const NavItem = ({ icon, children, path, ...rest }: NavItemProps) => {
 };
 
 const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
-  const { signOut, user } = useAuth();
+  const { usuario, logout } = useAuth();
   return (
     <Flex
       ml={{ base: 0, md: 60 }}
@@ -174,7 +174,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
         justifyContent={"center"}
       >
         {/* <Image src={logoSvgAmarela} alt="Logo" w={'40%'} h={'40%'} /> */}
-        <Text as="strong">HEFESTO</Text>
+        <Text as="strong">COALEMOS</Text>
       </Text>
 
       <HStack spacing={{ base: "0", md: "2" }}>
@@ -196,7 +196,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
               <HStack>
                 <Avatar
                   size={"md"}
-                  name={user?.nome}
+                  name={usuario?.nome}
                   icon={<AiOutlineUser fontSize="1.5rem" color="white" />}
                 />
                 <VStack
@@ -206,7 +206,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
                   ml="2"
                 >
                   <Text fontSize="sm" color="white">
-                    {user?.nome}
+                    {usuario?.nome}
                   </Text>
                   <Text fontSize="xs" color="white">
                     {/* {user?.is_admin === 1 ? 'Administrador' : 'Cliente'} */}
@@ -224,7 +224,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
             >
               <MenuItem>Perfil</MenuItem>
               <MenuDivider />
-              <MenuItem onClick={signOut}>Sair</MenuItem>
+              <MenuItem onClick={logout}>Sair</MenuItem>
             </MenuList>
           </Menu>
         </Flex>

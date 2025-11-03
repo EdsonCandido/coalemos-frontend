@@ -1,3 +1,4 @@
+import { useAuth } from "@/stores/auth-store";
 import {
   Button,
   Flex,
@@ -13,7 +14,6 @@ import {
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
-import useAuth from "../../hooks/auth";
 
 // import Logo from '../../assets/logo/AABB-azul.svg'
 
@@ -37,21 +37,9 @@ const Login = () => {
     }
 
     const result = await signIn({ login: loginTxt, password: passwordTxt });
-    if (result.success) {
-      toast.dismiss();
-      setIsLoadingSubmit(false);
 
-      if (result.data?.usuario?.is_admin !== 1) {
-        toast.error("Acesso negado!");
-      } else {
-        navigate("/admin/settings");
-      }
-
-      return;
-    } else {
-      toast.error(result.message);
-      setIsLoadingSubmit(false);
-    }
+    if (result) navigate("/admin/settings");
+    setIsLoadingSubmit(false);
   };
 
   const onKeyPress = (e: { keyCode: number }) => {
@@ -83,7 +71,7 @@ const Login = () => {
         >
           <Flex w={"100%"} justify={"center"} align={"center"}>
             {/* <Image src={Logo} h={150} /> */}
-            <Text>HEFESTO</Text>
+            <Text>COALEMOS</Text>
           </Flex>
         </Heading>
         <FormControl id="email" isRequired>

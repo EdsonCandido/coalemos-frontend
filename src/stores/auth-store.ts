@@ -4,7 +4,7 @@ import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
 interface User {
-  cod: string;
+  cod: number;
   nome: string;
   login: string;
   foto_perfil: string | null;
@@ -15,7 +15,7 @@ interface AuthState {
   accessToken: string | null;
   refreshToken: string | null;
   isAuthenticated: boolean;
-  login: ({
+  signIn: ({
     login,
     password,
   }: {
@@ -37,11 +37,18 @@ export const useAuth = create<AuthState>()(
       refreshToken: null,
       isAuthenticated: false,
 
-      login: async ({ login, password }) => {
+      signIn: async ({ login, password }) => {
+        toast.loading("Consultando...");
         const response = await http
           .post("/session/login", { login, password })
           .then((res) => ({ data: res.data, success: true, err: null }))
-          .catch((e) => ({ data: null, success: false, err: e.response.data }));
+          .catch((e) => ({
+            data: null,
+            success: false,
+            err: e.response?.data || e.message,
+          }));
+
+        toast.dismiss();
 
         if (response.success) {
           const { accessToken, refreshToken, usuario } = response.data;
@@ -58,7 +65,7 @@ export const useAuth = create<AuthState>()(
 
           return true;
         } else {
-          toast.info(response.err);
+          toast.error(`${response.err}`);
           return false;
           // get().logout();
         }
