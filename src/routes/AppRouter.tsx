@@ -25,7 +25,7 @@ export default function AppRouter() {
 
         <Route element={<PrivateRoute />}>
           <Route element={<DashboardLayout />}>
-            <Route path="/dashboard" element={<DashboardHome />} />
+            <Route path="/" element={<DashboardHome />} />
             <Route
               path="/dashboard/finance-summary"
               element={<FinanceSummary />}

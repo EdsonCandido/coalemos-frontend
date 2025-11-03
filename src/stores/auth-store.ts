@@ -23,7 +23,10 @@ interface AuthState {
     password: string;
   }) => Promise<boolean>;
   logout: () => void;
-  refreshTokenIfNeeded: () => Promise<void>;
+  refreshTokenIfNeeded: () => Promise<{
+    success: boolean;
+    accessToken: null | string;
+  }>;
 }
 
 export const useAuth = create<AuthState>()(
@@ -71,23 +74,25 @@ export const useAuth = create<AuthState>()(
       },
 
       refreshTokenIfNeeded: async () => {
-        const { accessToken, refreshToken } = get();
-        if (!accessToken && refreshToken) {
-          try {
-            const response = await fetch("/api/auth/refresh", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ refreshToken }),
-            });
-            if (response.ok) {
-              const data = await response.json();
-              set({ accessToken: data.accessToken });
-            } else {
-              get().logout();
-            }
-          } catch {
-            get().logout();
-          }
+        const refreshToken = get().refreshToken;
+        if (!refreshToken) throw new Error("Nenhum refresh token disponível");
+
+        const response = await http
+          .post("/session/refresh-token", { refreshToken })
+          .then((res) => ({ data: res.data, success: true }))
+          .catch(() => ({ data: null, success: false }));
+
+        if (response.success) {
+          set({
+            accessToken: response.data.accessToken,
+            refreshToken: response.data.refreshToken,
+          });
+
+          http.defaults.headers.common["Authorization"] =
+            `Bearer ${response.data.accessToken}`;
+          return { accessToken: response.data.accessToken, success: true };
+        } else {
+          return { accessToken: null, success: false };
         }
       },
     }),
