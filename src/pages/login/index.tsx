@@ -38,15 +38,12 @@ const Login = () => {
   });
 
   const onPressSubmit = async (e: LoginFormData) => {
-    console.log("e", e);
-
     const result = await signIn({ login: e.login, password: e.senha });
 
     if (result) navigate("/admin/settings");
   };
 
   const onKeyPress = (e: { keyCode: number }) => {
-    console.log("e", e);
     if (e.keyCode === 13) handleSubmit(onPressSubmit)();
   };
 
