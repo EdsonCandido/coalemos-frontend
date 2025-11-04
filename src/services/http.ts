@@ -1,8 +1,9 @@
+import env from "@/configs/env";
 import { useAuth } from "@/stores/auth-store";
 import axios from "axios";
 
 export const http = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:3000",
+  baseURL: env.VITE_API_URL,
   headers: {
     "Content-Type": "application/json",
   },

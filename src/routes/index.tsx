@@ -1,21 +1,21 @@
 import { lazy, Suspense } from "react";
 import { Navigate, Route, Routes } from "react-router";
 
-import LoginPage from "../view/login";
-import LoadingPage from "../view/loading";
-import NotFound from "../view/not-found";
+import LoginPage from "../pages/login";
+import LoadingPage from "../pages/loading";
+import NotFound from "../pages/not-found";
 import DashboardLayout from "../layout/dashboardLayout";
 import { useAuth } from "@/stores/auth-store";
 
-const AdminSettingslazy = lazy(() => import("../view/admin/settings"));
-const UsersAdminLazy = lazy(() => import("../view/admin/users"));
-const BannersAdminLazy = lazy(() => import("../view/admin/banners"));
-const ServicesAdminLazy = lazy(() => import("../view/admin/services"));
-const NoticiasAdminLazy = lazy(() => import("../view/admin/noticias"));
-const DocumentosAdminLazy = lazy(() => import("../view/admin/documentos"));
-const ClientesAdminLazy = lazy(() => import("../view/admin/clientes"));
+const AdminSettingslazy = lazy(() => import("../pages/admin/settings"));
+const UsersAdminLazy = lazy(() => import("../pages/admin/users"));
+const BannersAdminLazy = lazy(() => import("../pages/admin/banners"));
+const ServicesAdminLazy = lazy(() => import("../pages/admin/services"));
+const NoticiasAdminLazy = lazy(() => import("../pages/admin/noticias"));
+const DocumentosAdminLazy = lazy(() => import("../pages/admin/documentos"));
+const ClientesAdminLazy = lazy(() => import("../pages/admin/clientes"));
 
-const FinancialPageLazy = lazy(() => import("../view/financial"));
+const FinancialPageLazy = lazy(() => import("../pages/financial"));
 
 type IProps = {
   isAdmin?: boolean;
