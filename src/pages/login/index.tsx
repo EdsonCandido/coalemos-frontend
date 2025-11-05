@@ -40,7 +40,10 @@ const Login = () => {
   const onPressSubmit = async (e: LoginFormData) => {
     const result = await signIn({ login: e.login, password: e.senha });
 
-    if (result) navigate("/admin/settings");
+    if (result != null) {
+      if (result.is_admin == 1) navigate("/admin/settings");
+      else navigate("/dashboard");
+    }
   };
 
   const onKeyPress = (e: { keyCode: number }) => {

@@ -8,6 +8,7 @@ interface User {
   nome: string;
   login: string;
   foto_perfil: string | null;
+  is_admin: number;
 }
 
 interface AuthState {
@@ -21,7 +22,7 @@ interface AuthState {
   }: {
     login: string;
     password: string;
-  }) => Promise<boolean>;
+  }) => Promise<User | null>;
   logout: () => void;
   refreshTokenIfNeeded: () => Promise<{
     success: boolean;
@@ -63,10 +64,10 @@ export const useAuth = create<AuthState>()(
             isAuthenticated: true,
           });
 
-          return true;
+          return usuario;
         } else {
           toast.error(`${response.err}`);
-          return false;
+          return null;
           // get().logout();
         }
       },
