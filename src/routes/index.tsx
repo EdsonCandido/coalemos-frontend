@@ -44,6 +44,16 @@ const RoutesAplication = () => {
       <Route path="/login" element={<LoginPage />} />
       <Route element={<DashboardLayout />}>
         <Route
+          path="/dashboard"
+          element={
+            <Autenticate>
+              <Suspense fallback={<LoadingPage />}>
+                <FinancialPageLazy />
+              </Suspense>
+            </Autenticate>
+          }
+        />
+        <Route
           path="/financial"
           element={
             <Autenticate isAdmin>

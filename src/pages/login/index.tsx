@@ -41,7 +41,7 @@ const Login = () => {
     const result = await signIn({ login: e.login, password: e.senha });
 
     if (result != null) {
-      if (result.is_admin == 1) navigate("/admin/settings");
+      if (result.is_admin) navigate("/admin/settings");
       else navigate("/dashboard");
     }
   };
