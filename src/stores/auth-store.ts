@@ -1,18 +1,13 @@
 import { http } from "@/services/http";
+import type { tUsuarios } from "@/types/types";
 import { toast } from "react-toastify";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
-interface User {
-  cod: number;
-  nome: string;
-  login: string;
-  foto_perfil: string | null;
-  is_admin: boolean;
-}
-
 interface AuthState {
-  usuario: User | null;
+  hydrated: boolean;
+  setHydrated: (value: boolean) => void;
+  usuario: tUsuarios | null;
   accessToken: string | null;
   refreshToken: string | null;
   isAuthenticated: boolean;
@@ -22,7 +17,7 @@ interface AuthState {
   }: {
     login: string;
     password: string;
-  }) => Promise<User | null>;
+  }) => Promise<tUsuarios | null>;
   logout: () => void;
   refreshTokenIfNeeded: () => Promise<{
     success: boolean;
@@ -33,11 +28,13 @@ interface AuthState {
 export const useAuth = create<AuthState>()(
   persist(
     (set, get) => ({
+      hydrated: false,
       usuario: null,
       accessToken: null,
       refreshToken: null,
       isAuthenticated: false,
 
+      setHydrated: (value) => set({ hydrated: value }),
       signIn: async ({ login, password }) => {
         toast.loading("Consultando...");
         const response = await http
@@ -108,6 +105,9 @@ export const useAuth = create<AuthState>()(
         }
       },
     }),
-    { name: "auth-storage", storage: createJSONStorage(() => localStorage) }, // or sessionStorage
+    {
+      name: "auth-storage",
+      storage: createJSONStorage(() => localStorage), // or sessionStorage
+    },
   ),
 );

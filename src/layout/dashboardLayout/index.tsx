@@ -29,6 +29,7 @@ import type { IconType } from "react-icons";
 import { AiOutlineUser } from "react-icons/ai";
 
 import { GrMoney } from "react-icons/gr";
+import { MdOutlineSpaceDashboard } from "react-icons/md";
 import { useAuth } from "@/stores/auth-store";
 
 // import logoSvg from '../../assets/logo/AABB-azul.svg'
@@ -77,6 +78,9 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
         alignItems="center"
         gap={1}
       >
+        <NavItem icon={MdOutlineSpaceDashboard} path={"/dashboard"}>
+          Dashboard
+        </NavItem>
         <NavItem icon={GrMoney} path={"/financial"}>
           Financeiro
         </NavItem>
@@ -95,9 +99,6 @@ const NavItem = ({ icon, children, path, ...rest }: NavItemProps) => {
 
   const ref = location.state?.ref ? location.state?.ref : "";
 
-  console.log("pathname", pathname);
-
-  console.log("path", path);
   if (pathname === path || path == ref) {
     rest.bg = "#030067";
     rest.color = "white";
@@ -144,6 +145,13 @@ const NavItem = ({ icon, children, path, ...rest }: NavItemProps) => {
 
 const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
   const { usuario, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login", { replace: true });
+  };
+
   return (
     <Flex
       ml={{ base: 0, md: 60 }}
@@ -196,7 +204,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
               <HStack>
                 <Avatar
                   size={"md"}
-                  name={usuario?.nome}
+                  name={usuario?.foto_perfil || usuario?.nome}
                   icon={<AiOutlineUser fontSize="1.5rem" color="white" />}
                 />
                 <VStack
@@ -210,7 +218,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
                   </Text>
                   <Text fontSize="xs" color="white">
                     {/* {user?.is_admin === 1 ? 'Administrador' : 'Cliente'} */}
-                    Administrador
+                    {usuario?.login}
                   </Text>
                 </VStack>
                 <Box display={{ base: "none", md: "flex" }}>
@@ -224,7 +232,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
             >
               <MenuItem>Perfil</MenuItem>
               <MenuDivider />
-              <MenuItem onClick={logout}>Sair</MenuItem>
+              <MenuItem onClick={handleLogout}>Sair</MenuItem>
             </MenuList>
           </Menu>
         </Flex>

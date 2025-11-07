@@ -1,4 +1,4 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { Navigate, Route, Routes } from "react-router";
 
 import LoginPage from "../pages/login";
@@ -17,22 +17,25 @@ const ClientesAdminLazy = lazy(() => import("../pages/admin/clientes"));
 
 const FinancialPageLazy = lazy(() => import("../pages/financial"));
 
+const DashboardHomePageLazy = lazy(() => import("../pages/dashboard/home"));
+
 type IProps = {
   isAdmin?: boolean;
   children: JSX.Element;
 };
 
 const RoutesAplication = () => {
-  const { usuario, logout, isAuthenticated } = useAuth();
+  const { usuario, isAuthenticated, hydrated } = useAuth();
 
+  if (!hydrated) {
+    return <LoadingPage />;
+  }
   const Autenticate = ({ children, isAdmin }: IProps) => {
     let errAccess = false;
     if (!isAuthenticated) errAccess = true;
-
-    if (isAdmin && usuario?.cod === 1) errAccess = true;
+    if (isAdmin && !usuario?.is_admin) errAccess = true;
 
     if (errAccess) {
-      logout();
       return <Navigate to="/login" replace />;
     }
     return children;
@@ -48,7 +51,7 @@ const RoutesAplication = () => {
           element={
             <Autenticate>
               <Suspense fallback={<LoadingPage />}>
-                <FinancialPageLazy />
+                <DashboardHomePageLazy />
               </Suspense>
             </Autenticate>
           }
