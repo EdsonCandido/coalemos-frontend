@@ -1,51 +1,62 @@
-import { lazy, Suspense, useEffect } from "react";
-import { Navigate, Route, Routes } from "react-router";
+import { lazy, Suspense } from 'react'
+import { Navigate, Route, Routes } from 'react-router'
 
-import LoginPage from "../pages/login";
-import LoadingPage from "../pages/loading";
-import NotFound from "../pages/not-found";
-import DashboardLayout from "../layout/dashboardLayout";
-import { useAuth } from "@/stores/auth-store";
+import { useAuth } from '@/stores/auth-store'
+import LoginPage from '../pages/login'
+import LoadingPage from '../pages/loading'
+import NotFound from '../pages/not-found'
+import DashboardLayout from '../layout/dashboardLayout'
 
-const AdminSettingslazy = lazy(() => import("../pages/admin/settings"));
-const UsersAdminLazy = lazy(() => import("../pages/admin/users"));
-const BannersAdminLazy = lazy(() => import("../pages/admin/banners"));
-const ServicesAdminLazy = lazy(() => import("../pages/admin/services"));
-const NoticiasAdminLazy = lazy(() => import("../pages/admin/noticias"));
-const DocumentosAdminLazy = lazy(() => import("../pages/admin/documentos"));
-const ClientesAdminLazy = lazy(() => import("../pages/admin/clientes"));
+const PainelPageLazy = lazy(() => import('../pages/painel'))
+const AdminSettingslazy = lazy(() => import('../pages/admin/settings'))
+const UsersAdminLazy = lazy(() => import('../pages/admin/users'))
+const BannersAdminLazy = lazy(() => import('../pages/admin/banners'))
+const ServicesAdminLazy = lazy(() => import('../pages/admin/services'))
+const NoticiasAdminLazy = lazy(() => import('../pages/admin/noticias'))
+const DocumentosAdminLazy = lazy(() => import('../pages/admin/documentos'))
+const ClientesAdminLazy = lazy(() => import('../pages/admin/clientes'))
 
-const FinancialPageLazy = lazy(() => import("../pages/financial"));
+const FinancialPageLazy = lazy(() => import('../pages/financial'))
 
-const DashboardHomePageLazy = lazy(() => import("../pages/dashboard/home"));
+const DashboardHomePageLazy = lazy(() => import('../pages/dashboard/home'))
 
 type IProps = {
-  isAdmin?: boolean;
-  children: JSX.Element;
-};
+  isAdmin?: boolean
+  children: JSX.Element
+}
 
 const RoutesAplication = () => {
-  const { usuario, isAuthenticated, hydrated } = useAuth();
+  const { usuario, isAuthenticated, hydrated } = useAuth()
 
   if (!hydrated) {
-    return <LoadingPage />;
+    return <LoadingPage />
   }
   const Autenticate = ({ children, isAdmin }: IProps) => {
-    let errAccess = false;
-    if (!isAuthenticated) errAccess = true;
-    if (isAdmin && !usuario?.is_admin) errAccess = true;
+    let errAccess = false
+    if (!isAuthenticated) errAccess = true
+    if (isAdmin && !usuario?.is_admin) errAccess = true
 
     if (errAccess) {
-      return <Navigate to="/login" replace />;
+      return <Navigate to="/login" replace />
     }
-    return children;
-  };
+    return children
+  }
 
   return (
     <Routes>
       <Route path="/" element={<Navigate to="/login" replace />} />
       <Route path="/login" element={<LoginPage />} />
       <Route element={<DashboardLayout />}>
+        <Route
+          path="/painel"
+          element={
+            <Autenticate>
+              <Suspense fallback={<LoadingPage />}>
+                <PainelPageLazy />
+              </Suspense>
+            </Autenticate>
+          }
+        />
         <Route
           path="/dashboard"
           element={
@@ -139,7 +150,7 @@ const RoutesAplication = () => {
       </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>
-  );
-};
+  )
+}
 
-export default RoutesAplication;
+export default RoutesAplication
