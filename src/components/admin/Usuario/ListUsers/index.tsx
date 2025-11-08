@@ -1,26 +1,26 @@
-import { Flex, Stack, Text } from "@chakra-ui/react";
-import { DataGrid } from "devextreme-react";
+import { Flex, Stack, Text } from '@chakra-ui/react'
+import { DataGrid } from 'devextreme-react'
 import {
   Column,
   Pager,
   Paging,
   SearchPanel,
   Selection,
-} from "devextreme-react/data-grid";
-import { FaCheckCircle, FaSearch, FaTimesCircle } from "react-icons/fa";
-import { IconButton } from "rsuite";
-import type { tUsuarios } from "@/types/types";
-import Loading from "@/components/Loading";
-import { dateFormat } from "@/utils/mask";
-import { changeActiveUser } from "@/services/users.http";
-import { toast } from "react-toastify";
+} from 'devextreme-react/data-grid'
+import { FaCheckCircle, FaSearch, FaTimesCircle } from 'react-icons/fa'
+import { IconButton } from 'rsuite'
+import type { tUsuarios } from '@/types/types'
+import Loading from '@/components/ui/Loading'
+import { dateFormat } from '@/utils/mask'
+import { changeActiveUser } from '@/services/users.http'
+import { toast } from 'react-toastify'
 
 type Input = {
-  isLoadingPage: boolean;
-  onPressModal: (value: number | null) => void;
-  dataFormat: tUsuarios[];
-  onSuccess: () => Promise<void>;
-};
+  isLoadingPage: boolean
+  onPressModal: (value: number | null) => void
+  dataFormat: tUsuarios[]
+  onSuccess: () => Promise<void>
+}
 
 const ListUser = ({
   isLoadingPage,
@@ -29,24 +29,23 @@ const ListUser = ({
   onSuccess,
 }: Input) => {
   const openModalEdit = (value: number) => {
-    onPressModal(value);
-  };
+    onPressModal(value)
+  }
 
   const handleAtivo = async (cod: number, is_ativo: boolean) => {
-    const result = await changeActiveUser(cod);
-
+    const result = await changeActiveUser(cod)
     if (result.success) {
       toast.success(
-        `Usuário ${is_ativo ? "desativado" : "ativado"} com sucesso`,
-      );
-      await onSuccess();
+        `Usuário ${is_ativo ? 'desativado' : 'ativado'} com sucesso`
+      )
+      await onSuccess()
     } else {
-      toast.error(result.message);
+      toast.error(result.message)
     }
-  };
+  }
   const handlerOptions = (key: number, isActive: boolean) => {
     return (
-      <Flex gap={3} justifyContent={"center"} align={"center"}>
+      <Flex gap={3} justifyContent={'center'} align={'center'}>
         <IconButton
           icon={<FaSearch color="gray" size={20} />}
           onClick={() => openModalEdit(key)}
@@ -64,54 +63,54 @@ const ListUser = ({
           />
         )}
       </Flex>
-    );
-  };
+    )
+  }
   const handerSimNao = (value: boolean) => {
     return (
       <>
         <p
           style={{
-            backgroundColor: value ? "#38a169" : "#e53e3e",
-            borderRadius: "5px",
-            color: "white",
-            textAlign: "center",
-            height: "20px",
-            paddingRight: "5px",
-            paddingLeft: "5px",
+            backgroundColor: value ? '#38a169' : '#e53e3e',
+            borderRadius: '5px',
+            color: 'white',
+            textAlign: 'center',
+            height: '20px',
+            paddingRight: '5px',
+            paddingLeft: '5px',
           }}
         >
-          {value ? "Sim" : "Não"}
+          {value ? 'Sim' : 'Não'}
         </p>
       </>
-    );
-  };
+    )
+  }
   return (
     <>
       {isLoadingPage ? (
         <Stack
-          w={"100%"}
-          bg={"white"}
-          borderRadius={"5px"}
-          p={"10px"}
-          gap={"10px"}
-          boxShadow={"lg"}
+          w={'100%'}
+          bg={'white'}
+          borderRadius={'5px'}
+          p={'10px'}
+          gap={'10px'}
+          boxShadow={'lg'}
         >
           <Loading />
         </Stack>
       ) : (
         <Stack
-          w={"100%"}
-          bg={"white"}
-          borderRadius={"5px"}
-          p={"10px"}
-          gap={"10px"}
-          boxShadow={"lg"}
+          w={'100%'}
+          bg={'white'}
+          borderRadius={'5px'}
+          p={'10px'}
+          gap={'10px'}
+          boxShadow={'lg'}
         >
           <DataGrid
             dataSource={dataFormat}
-            keyExpr={"cod"}
+            keyExpr={'cod'}
             width="100%"
-            height={"35hw"}
+            height={'35hw'}
             hoverStateEnabled={true}
             showRowLines={true}
             allowColumnResizing={true}
@@ -148,7 +147,7 @@ const ListUser = ({
               caption="#"
               dataField="#"
               minWidth={50}
-              alignment={"center"}
+              alignment={'center'}
               cellRender={(e) => handlerOptions(e.data.cod, e.data.is_ativo)}
             />
             <Column
@@ -156,17 +155,17 @@ const ListUser = ({
               dataField="created_at"
               minWidth={100}
               cellRender={(e) => (
-                <Text> {dateFormat(e.value, "dd/MM/yyyy")}</Text>
+                <Text> {dateFormat(e.value, 'dd/MM/yyyy')}</Text>
               )}
             />
             <Column
               caption="Usuário"
               dataField="nome"
               minWidth={110}
-              alignment={"center"}
+              alignment={'center'}
               cellRender={(e) => <Text>{e.value}</Text>}
             />
-            <Column caption="Login" alignment={"center"} dataField="login" />
+            <Column caption="Login" alignment={'center'} dataField="login" />
             {/*<Column
               caption="CPF"
               alignment={"center"}
@@ -175,19 +174,19 @@ const ListUser = ({
             />*/}
             <Column
               caption="Admin"
-              alignment={"center"}
+              alignment={'center'}
               dataField="is_admin"
               cellRender={(e) => handerSimNao(e.value)}
             />
             <Column
               caption="Ativo"
-              alignment={"center"}
+              alignment={'center'}
               dataField="is_ativo"
               cellRender={(e) => handerSimNao(e.value)}
             />
             <Column
               caption="Primeiro Acesso"
-              alignment={"center"}
+              alignment={'center'}
               dataField="is_primeiro_acesso"
               cellRender={(e) => handerSimNao(e.value)}
             />
@@ -195,7 +194,7 @@ const ListUser = ({
         </Stack>
       )}
     </>
-  );
-};
+  )
+}
 
-export default ListUser;
+export default ListUser

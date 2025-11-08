@@ -1,73 +1,74 @@
-import { Button, Flex, Stack, Text } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import { FaPlus } from "react-icons/fa";
-import { useNavigate } from "react-router";
-import Loading from "../../../components/Loading";
-import TabelaClientes from "../../../components/admin/Clientes/TabelaClientes";
-import { http } from "../../../services/http";
+import { Button, Flex, Stack, Text } from '@chakra-ui/react'
+import { useEffect, useState } from 'react'
+import { FaPlus } from 'react-icons/fa'
+import { useNavigate } from 'react-router'
+import Loading from '../../../components/ui/Loading'
+import TabelaClientes from '../../../components/admin/Clientes/TabelaClientes'
+import { http } from '../../../services/http'
 
 const Clientes = () => {
-  const router = useNavigate();
+  const router = useNavigate()
 
-  const [isLoadingPage, setIsloadingPage] = useState(false);
-  const [dataRequest, setDataRequest] = useState<null | []>(null);
+  const [isLoadingPage, setIsloadingPage] = useState(false)
+  const [dataRequest, setDataRequest] = useState<null | []>(null)
 
   const onOpenModal = (cod?: number) => {
-    console.log("cod", cod);
-  };
+    console.log('cod', cod)
+  }
 
   const onInit = async () => {
-    setIsloadingPage(true); 
+    setIsloadingPage(true)
 
-    const request = await http.get('/clients')
-      .then((e) => ({data: e.data, success: true}))
-      .catch(() => ({data: null, success: false}))
+    const request = await http
+      .get('/clients')
+      .then((e) => ({ data: e.data, success: true }))
+      .catch(() => ({ data: null, success: false }))
 
-      if(request.success){
-        setDataRequest(request.data);
-        setIsloadingPage(false);
-      }
-  };
+    if (request.success) {
+      setDataRequest(request.data)
+      setIsloadingPage(false)
+    }
+  }
 
   useEffect(() => {
-    void onInit();
-  }, []);
+    void onInit()
+  }, [])
 
   return (
     <Flex
-      flexDir={"column"}
-      justifyContent={"center"}
-      alignItems={"flex-start"}
-      gap={"10px"}
+      flexDir={'column'}
+      justifyContent={'center'}
+      alignItems={'flex-start'}
+      gap={'10px'}
     >
       <Flex>
         <Text
-          cursor={"pointer"}
+          cursor={'pointer'}
           onClick={() => router(-1)}
           _hover={{
-            textDecoration: "underline",
-            color: "blue",
+            textDecoration: 'underline',
+            color: 'blue',
           }}
         >
           Configurações / Admin / Clientes
         </Text>
       </Flex>
       <Stack
-        w={"100%"}
-        bg={"white"}
-        borderRadius={"5px"}
-        p={"10px"}
-        gap={"10px"}
-        boxShadow={"lg"}
+        w={'100%'}
+        bg={'white'}
+        borderRadius={'5px'}
+        p={'10px'}
+        gap={'10px'}
+        boxShadow={'lg'}
       >
-        <Flex w={"100%"} justify={"space-between"}>
-          <Flex w={"100%"} justify={"flex-end"}>
+        <Flex w={'100%'} justify={'space-between'}>
+          <Flex w={'100%'} justify={'flex-end'}>
             <Button
               onClick={() => onOpenModal()}
               isDisabled={isLoadingPage}
               isLoading={isLoadingPage}
               colorScheme="green"
-              size={"sm"}
+              size={'sm'}
               leftIcon={<FaPlus />}
             >
               Novo
@@ -77,12 +78,12 @@ const Clientes = () => {
       </Stack>
 
       <Stack
-        w={"100%"}
-        bg={"white"}
-        borderRadius={"5px"}
-        p={"10px"}
-        gap={"10px"}
-        boxShadow={"lg"}
+        w={'100%'}
+        bg={'white'}
+        borderRadius={'5px'}
+        p={'10px'}
+        gap={'10px'}
+        boxShadow={'lg'}
       >
         {isLoadingPage ? (
           <Loading />
@@ -91,7 +92,7 @@ const Clientes = () => {
         )}
       </Stack>
     </Flex>
-  );
-};
+  )
+}
 
-export default Clientes;
+export default Clientes

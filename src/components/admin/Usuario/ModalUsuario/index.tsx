@@ -1,8 +1,8 @@
-import { toast } from "react-toastify";
-import Loading from "../../../Loading";
-import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
-import { useDebounce } from "../../../../hooks/debounced";
-import { useEffect, useMemo, useState } from "react";
+import { toast } from 'react-toastify'
+import Loading from '../../../ui/Loading'
+import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
+import { useDebounce } from '../../../../hooks/debounced'
+import { useEffect, useMemo, useState } from 'react'
 import {
   Button,
   Checkbox,
@@ -18,19 +18,19 @@ import {
   InputGroup,
   InputRightElement,
   Text,
-} from "@chakra-ui/react";
-import { manterApenasNumeros } from "@/utils/format";
-import isValidCPF from "@/utils/isValidCPF";
-import { formatCpfCnpj } from "@/utils/mask";
-import { findUserById, storeUser, validLogin } from "@/services/users.http";
+} from '@chakra-ui/react'
+import { manterApenasNumeros } from '@/utils/format'
+import isValidCPF from '@/utils/isValidCPF'
+import { formatCpfCnpj } from '@/utils/mask'
+import { findUserById, storeUser, validLogin } from '@/services/users.http'
 
 type Input = {
-  isOpen: boolean;
-  userId: number | null;
-  setUserId: (value: number | null) => void;
-  setIsOpenModal: (value: boolean) => void;
-  onSuccess: () => Promise<void>;
-};
+  isOpen: boolean
+  userId: number | null
+  setUserId: (value: number | null) => void
+  setIsOpenModal: (value: boolean) => void
+  onSuccess: () => Promise<void>
+}
 
 const ModalUsuario = ({
   onSuccess,
@@ -39,75 +39,75 @@ const ModalUsuario = ({
   setIsOpenModal,
   setUserId,
 }: Input) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [isLoadingSubmit, setIsLoadingSubmit] = useState(false);
+  const [isLoading, setIsLoading] = useState(false)
+  const [isLoadingSubmit, setIsLoadingSubmit] = useState(false)
 
-  const [nomeCompleto, setNomeCompleto] = useState("");
-  const [loginTxt, setLoginTxt] = useState("");
-  const [isActive, setIsActive] = useState(true);
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [primeiroAcesso, setPrimeiroAcesso] = useState(false);
-  const [cpf, setCpf] = useState("");
+  const [nomeCompleto, setNomeCompleto] = useState('')
+  const [loginTxt, setLoginTxt] = useState('')
+  const [isActive, setIsActive] = useState(true)
+  const [isAdmin, setIsAdmin] = useState(false)
+  const [primeiroAcesso, setPrimeiroAcesso] = useState(false)
+  const [cpf, setCpf] = useState('')
 
-  const [isDisabled, setIsDisabled] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(false)
 
-  const [passwordTxt, setPasswordTxt] = useState("");
-  const [passwordConfirmTxt, setPasswordConfirmTxt] = useState("");
+  const [passwordTxt, setPasswordTxt] = useState('')
+  const [passwordConfirmTxt, setPasswordConfirmTxt] = useState('')
 
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false)
 
-  const loginDebounced = useDebounce(loginTxt, 500);
-  const [validLoginState, setValidLoginState] = useState(true);
+  const loginDebounced = useDebounce(loginTxt, 500)
+  const [validLoginState, setValidLoginState] = useState(true)
 
-  const [isEditModal, setIsEditModal] = useState(false);
+  const [isEditModal, setIsEditModal] = useState(false)
 
   const validPassword = useMemo(() => {
-    const result = { valid: true, message: "" };
+    const result = { valid: true, message: '' }
 
     if (passwordTxt.length > 3 || passwordConfirmTxt.length > 3) {
-      if (userId && passwordTxt.length < 1) return result;
+      if (userId && passwordTxt.length < 1) return result
 
       if (passwordConfirmTxt != passwordTxt) {
-        result.message = "As senhas não são iguais";
-        result.valid = false;
+        result.message = 'As senhas não são iguais'
+        result.valid = false
       }
     }
 
-    return result;
-  }, [passwordConfirmTxt, passwordTxt, userId]);
+    return result
+  }, [passwordConfirmTxt, passwordTxt, userId])
 
   const onSubmit = async () => {
-    setIsLoadingSubmit(true);
+    setIsLoadingSubmit(true)
 
-    toast.dismiss();
+    toast.dismiss()
 
-    let isInvalid = false;
+    let isInvalid = false
     if (nomeCompleto.length < 1) {
-      toast.warn("Nome do usuário não pode ser vazio", {
-        position: "top-left",
-      });
-      isInvalid = true;
+      toast.warn('Nome do usuário não pode ser vazio', {
+        position: 'top-left',
+      })
+      isInvalid = true
     }
 
     if (!validPassword.valid) {
-      toast.warn(validPassword.message, { position: "top-left" });
-      isInvalid = true;
+      toast.warn(validPassword.message, { position: 'top-left' })
+      isInvalid = true
     }
     if (passwordConfirmTxt.length < 1 && passwordTxt.length < 1 && !userId) {
-      toast.warn("Senha do usuário nao pode ser vazia", {
-        position: "top-left",
-      });
-      isInvalid = true;
+      toast.warn('Senha do usuário nao pode ser vazia', {
+        position: 'top-left',
+      })
+      isInvalid = true
     }
 
-    if (loginTxt.length < 5 || !loginTxt.includes("@")) {
-      toast.warn("Login inválido, tente outro", { position: "top-left" });
-      isInvalid = true;
+    if (loginTxt.length < 5 || !loginTxt.includes('@')) {
+      toast.warn('Login inválido, tente outro', { position: 'top-left' })
+      isInvalid = true
     }
 
     if (validLoginState === false) {
-      toast.warn("Login inválido, tente outro", { position: "top-left" });
-      isInvalid = true;
+      toast.warn('Login inválido, tente outro', { position: 'top-left' })
+      isInvalid = true
     }
     // if (cpf.length < 1) {
     //   toast.warn("CPf não pode ser vazio", { position: "top-left" });
@@ -115,14 +115,14 @@ const ModalUsuario = ({
     // }
 
     if (isInvalid) {
-      toast.warn("Preença todos os campos corretamente", {
-        position: "top-left",
-      });
+      toast.warn('Preença todos os campos corretamente', {
+        position: 'top-left',
+      })
       setTimeout(() => {
-        setIsLoadingSubmit(false);
-      }, 1500);
+        setIsLoadingSubmit(false)
+      }, 1500)
 
-      return;
+      return
     }
 
     const payload = {
@@ -135,65 +135,65 @@ const ModalUsuario = ({
       senha: passwordTxt,
       nome: nomeCompleto,
       foto_perfil: null,
-    };
-
-    const result = await storeUser({ ...payload });
-
-    if (result.success) {
-      toast.success("Usuário cadastrado com sucesso!");
-
-      setIsLoadingSubmit(false);
-      onCloseModal();
-    } else {
-      console.error(result);
-      toast.warn(result.message);
     }
 
-    setIsLoadingSubmit(false);
-    await onSuccess();
-  };
+    const result = await storeUser({ ...payload })
+
+    if (result.success) {
+      toast.success('Usuário cadastrado com sucesso!')
+
+      setIsLoadingSubmit(false)
+      onCloseModal()
+    } else {
+      console.error(result)
+      toast.warn(result.message)
+    }
+
+    setIsLoadingSubmit(false)
+    await onSuccess()
+  }
 
   const onLoadUser = async () => {
     if (userId) {
-      const query = await findUserById(userId);
+      const query = await findUserById(userId)
 
       if (query.success) {
-        setNomeCompleto(query.data!.nome);
-        setLoginTxt(query.data!.login);
-        setIsActive(query.data?.is_ativo ? true : false);
-        setIsAdmin(query.data?.is_admin ? true : false);
-        setPrimeiroAcesso(query.data?.is_primeiro_acesso ? true : false);
+        setNomeCompleto(query.data!.nome)
+        setLoginTxt(query.data!.login)
+        setIsActive(query.data?.is_ativo ? true : false)
+        setIsAdmin(query.data?.is_admin ? true : false)
+        setPrimeiroAcesso(query.data?.is_primeiro_acesso ? true : false)
       }
     }
-  };
+  }
 
   const onCloseModal = () => {
-    setNomeCompleto("");
-    setLoginTxt("");
-    setIsActive(false);
-    setIsAdmin(false);
-    setIsOpenModal(false);
-    setPrimeiroAcesso(false);
-    setUserId(null);
-  };
+    setNomeCompleto('')
+    setLoginTxt('')
+    setIsActive(false)
+    setIsAdmin(false)
+    setIsOpenModal(false)
+    setPrimeiroAcesso(false)
+    setUserId(null)
+  }
 
   const onInit = async () => {
-    setIsLoading(true);
+    setIsLoading(true)
     if (userId) {
-      await onLoadUser();
-      setIsEditModal(true);
+      await onLoadUser()
+      setIsEditModal(true)
     }
-    setIsLoading(false);
-  };
+    setIsLoading(false)
+  }
 
   const checkValidLogin = async (value: string) => {
-    const result = await validLogin(value);
+    const result = await validLogin(value)
     if (result.success) {
-      return false;
+      return false
     } else {
-      return true;
+      return true
     }
-  };
+  }
 
   // useEffect(() => {
   //   if (cpf.length > 10) {
@@ -211,47 +211,47 @@ const ModalUsuario = ({
   useEffect(() => {
     const fetch = async () => {
       if (loginDebounced.length > 3) {
-        const result = await checkValidLogin(loginDebounced);
+        const result = await checkValidLogin(loginDebounced)
         if (!isEditModal) {
           if (result) {
-            setValidLoginState(false);
+            setValidLoginState(false)
           }
           if (!result) {
-            setValidLoginState(true);
+            setValidLoginState(true)
           }
         }
       }
-    };
+    }
 
-    fetch();
-  }, [loginDebounced]);
+    fetch()
+  }, [loginDebounced])
 
   useEffect(() => {
-    if (isOpen) void onInit();
-  }, [isOpen]);
+    if (isOpen) void onInit()
+  }, [isOpen])
   return (
     <Drawer
       onClose={onCloseModal}
       closeOnOverlayClick={false}
       closeOnEsc={false}
       isOpen={isOpen}
-      size={"sm"}
+      size={'sm'}
     >
       <DrawerOverlay />
       <DrawerContent>
         <DrawerCloseButton />
         <DrawerHeader as="p">
-          {userId ? "Editar Usuário" : "Novo Usuário"}
+          {userId ? 'Editar Usuário' : 'Novo Usuário'}
         </DrawerHeader>
         <DrawerBody>
           {isLoading ? (
             <Loading />
           ) : (
-            <Flex w={"100%"} p={1} gap={1} flexDir={"column"}>
-              <Flex w={"100%"} p={1} gap={1} flexDir={"column"}>
+            <Flex w={'100%'} p={1} gap={1} flexDir={'column'}>
+              <Flex w={'100%'} p={1} gap={1} flexDir={'column'}>
                 <Flex>
                   <Text>Nome</Text>
-                  <span style={{ color: "red" }}>*</span>
+                  <span style={{ color: 'red' }}>*</span>
                 </Flex>
                 <Input
                   isDisabled={isLoadingSubmit}
@@ -260,12 +260,12 @@ const ModalUsuario = ({
                   type="text"
                 />
               </Flex>
-              <Flex w={"100%"} p={1} gap={1} flexDir={"column"}>
+              <Flex w={'100%'} p={1} gap={1} flexDir={'column'}>
                 <Flex>
                   <Text>Login</Text>
-                  <span style={{ color: "red" }}>*</span>
+                  <span style={{ color: 'red' }}>*</span>
                 </Flex>
-                <span style={{ fontSize: "14px" }}>
+                <span style={{ fontSize: '14px' }}>
                   Seu login deve ser uma e-mail válido.
                 </span>
                 <Input
@@ -277,7 +277,7 @@ const ModalUsuario = ({
                   isInvalid={!validLoginState}
                 />
                 {!validLoginState && (
-                  <span style={{ color: "red" }}>Login já cadastrado</span>
+                  <span style={{ color: 'red' }}>Login já cadastrado</span>
                 )}
               </Flex>
               {/*<Flex w={"100%"} p={1} gap={1} flexDir={"column"}>
@@ -295,11 +295,11 @@ const ModalUsuario = ({
                   <span style={{ color: "red" }}>CPF inválido</span>
                 )}
               </Flex>*/}
-              <Flex align={"flex-end"} justify={"center"}>
-                <Flex w={"100%"} p={1} gap={1} flexDir={"column"}>
+              <Flex align={'flex-end'} justify={'center'}>
+                <Flex w={'100%'} p={1} gap={1} flexDir={'column'}>
                   <Flex>
                     <Text>Senha</Text>
-                    {!userId && <span style={{ color: "red" }}>*</span>}
+                    {!userId && <span style={{ color: 'red' }}>*</span>}
                   </Flex>
                   <InputGroup>
                     <Input
@@ -307,11 +307,11 @@ const ModalUsuario = ({
                       isInvalid={!validPassword.valid}
                       onChange={(e) => setPasswordTxt(e.target.value)}
                       value={passwordTxt}
-                      type={showPassword ? "text" : "password"}
+                      type={showPassword ? 'text' : 'password'}
                     />
-                    <InputRightElement h={"full"}>
+                    <InputRightElement h={'full'}>
                       <Button
-                        variant={"ghost"}
+                        variant={'ghost'}
                         onClick={() =>
                           setShowPassword((showPassword) => !showPassword)
                         }
@@ -321,10 +321,10 @@ const ModalUsuario = ({
                     </InputRightElement>
                   </InputGroup>
                 </Flex>
-                <Flex w={"100%"} py={1} gap={1} flexDir={"column"}>
+                <Flex w={'100%'} py={1} gap={1} flexDir={'column'}>
                   <Flex>
                     <Text>Confirmação de Senha</Text>
-                    {!userId && <span style={{ color: "red" }}>*</span>}
+                    {!userId && <span style={{ color: 'red' }}>*</span>}
                   </Flex>
                   <InputGroup>
                     <Input
@@ -332,11 +332,11 @@ const ModalUsuario = ({
                       isInvalid={!validPassword.valid}
                       onChange={(e) => setPasswordConfirmTxt(e.target.value)}
                       value={passwordConfirmTxt}
-                      type={showPassword ? "text" : "password"}
+                      type={showPassword ? 'text' : 'password'}
                     />
-                    <InputRightElement h={"full"}>
+                    <InputRightElement h={'full'}>
                       <Button
-                        variant={"ghost"}
+                        variant={'ghost'}
                         onClick={() =>
                           setShowPassword((showPassword) => !showPassword)
                         }
@@ -353,8 +353,8 @@ const ModalUsuario = ({
                 </small>
               )}
               {!validPassword.valid && (
-                <Flex w={"100%"} justify={"center"} mb={"20px"}>
-                  <span style={{ color: "red" }}>{validPassword.message}</span>
+                <Flex w={'100%'} justify={'center'} mb={'20px'}>
+                  <span style={{ color: 'red' }}>{validPassword.message}</span>
                 </Flex>
               )}
               <Flex gap={3} p={1}>
@@ -404,7 +404,7 @@ const ModalUsuario = ({
         </DrawerFooter>
       </DrawerContent>
     </Drawer>
-  );
-};
+  )
+}
 
-export default ModalUsuario;
+export default ModalUsuario
