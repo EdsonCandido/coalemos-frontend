@@ -18,7 +18,11 @@ const findCurrentBanners = async (): Promise<ApiResponse<tBanners[] | null>> => 
 
 const findBannerByCod = async (cod: number): Promise<ApiResponse<tBanners | null>> => {
   const request = await http
-    .get(`${BASE_ROUTER}/${cod}`)
+    .get(`${BASE_ROUTER}`, {
+      params: {
+        cod,
+      },
+    })
     .then((e) => ({ data: e.data, success: true, message: null }))
     .catch((e) => ({
       data: null,
@@ -46,7 +50,7 @@ const changeActiveBannerByCod = async (
   cod: number,
 ): Promise<ApiResponse<null | tBanners>> => {
   const request = await http
-    .put(`${BASE_ROUTER}/${cod}`)
+    .delete(`${BASE_ROUTER}/${cod}`)
     .then((e) => ({ data: e.data, success: true, message: null }))
     .catch((e) => ({
       data: null,
@@ -65,7 +69,7 @@ const storeBanner = async (banner: tBanners): Promise<ApiResponse<null | tBanner
   payload.append('descricao', banner.descricao);
 
   if(banner.arquivo) {
-    payload.append('arquivo', banner.arquivo);
+    payload.append('file', banner.arquivo);
   }
   if(banner.cod) {
     payload.append('cod', String(banner.cod));
