@@ -11,6 +11,7 @@ export type tBanners = {
   nome_arquivo?: string;
   data_vigencia_inicial: string;
   data_vigencia_final: string;
+  is_ativo?: boolean;
   created_at?: string;
   cod_usuario_criacao?: number;
   updated_at?: string;
