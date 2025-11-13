@@ -8,20 +8,18 @@ import {
   SearchPanel,
   Selection,
 } from 'devextreme-react/data-grid'
-import { dateFormat } from '../../../../utils/mask'
-import Loading from '../../../ui/Loading'
-import { Banner } from '../../../../types/AuthContextData'
-import { http } from '../../../../services/http'
+import { dateFormat } from '@/utils/mask'
 import { toast } from 'react-toastify'
 import { FaCheckCircle, FaSearch, FaTimesCircle } from 'react-icons/fa'
 import { IconButton } from 'rsuite'
-
-type dataFormat = Banner & { index: number }
+import type { tBanners } from '@/types/types'
+import { changeActiveBannerByCod } from '@/services/banners.http'
+import Loading from '@/components/ui/Loading'
 
 type Input = {
   isLoadingPage: boolean
   onPressModal: (value: number | null) => void
-  dataFormat: dataFormat[]
+  dataFormat: tBanners[]
   onSuccess: () => Promise<void>
 }
 
@@ -35,7 +33,7 @@ const ListBanners = ({
     onPressModal(value)
   }
 
-  const handerSimNao = (value: 1 | 0) => {
+  const handerSimNao = (value: boolean) => {
     return (
       <>
         <p
@@ -55,26 +53,11 @@ const ListBanners = ({
     )
   }
 
-  const handleAtivo = async (cod: number, is_ativo: number) => {
-    const result = await http
-      .delete('banners/' + cod)
-      .then((e) => ({
-        data: e.data,
-        success: true,
-        error: null,
-        message: 'OK',
-      }))
-      .catch((e) => ({
-        data: null,
-        success: false,
-        error: e.response?.data,
-        message: e.response?.data || e.message,
-      }))
+  const handleAtivo = async (cod: number, is_ativo: boolean) => {
+    const result = await changeActiveBannerByCod(cod)
 
     if (result.success) {
-      toast.success(
-        `Banner ${is_ativo === 1 ? 'desativado' : 'ativado'} com sucesso`
-      )
+      toast.success(`Banner ${is_ativo ? 'desativado' : 'ativado'} com sucesso`)
       await onSuccess()
     } else {
       toast.error(result.message)
@@ -139,7 +122,7 @@ const ListBanners = ({
                     onClick={() => openModalEdit(e.row.data.cod)}
                   />
 
-                  {e.row.data.is_ativo === 0 ? (
+                  {e.row.data.is_ativo ? (
                     <IconButton
                       icon={<FaTimesCircle color="#e53e3e" size={20} />}
                       onClick={() => {
@@ -166,22 +149,17 @@ const ListBanners = ({
                 <Text> {dateFormat(e.value, 'dd/MM/yyyy')}</Text>
               )}
             />
-            <Column
-              caption="Título"
-              dataField="titulo"
-              minWidth={110}
-              alignment={'center'}
-              cellRender={(e) => <Text>{e.value}</Text>}
-            />
+
             <Column
               caption="Descrição"
               alignment={'center'}
               dataField="descricao"
+              cellRender={(e) => <Text>{e.value}</Text>}
             />
             <Column
               caption="Dt. Início"
               alignment={'center'}
-              dataField="dt_inicio"
+              dataField="data_vigencia_inicial"
               cellRender={(e) => (
                 <Text>{dateFormat(e.value, 'dd/MM/yyyy')}</Text>
               )}
@@ -189,7 +167,7 @@ const ListBanners = ({
             <Column
               caption="Dt. Fim"
               alignment={'center'}
-              dataField="dt_fim"
+              dataField="data_vigencia_final"
               cellRender={(e) => (
                 <Text>{dateFormat(e.value, 'dd/MM/yyyy')}</Text>
               )}

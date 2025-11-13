@@ -1,5 +1,4 @@
 import { toast } from 'react-toastify'
-import Loading from '../../../ui/Loading'
 import { useEffect, useState } from 'react'
 import {
   Button,
@@ -16,7 +15,8 @@ import {
   Text,
 } from '@chakra-ui/react'
 import { FileUploader } from 'devextreme-react'
-import { http } from '../../../../services/http'
+import { findBannerByCod, storeBanner } from '@/services/banners.http'
+import Loading from '@/components/ui/Loading'
 
 type Input = {
   isOpen: boolean
@@ -36,11 +36,9 @@ const ModalBanner = ({
   const [isLoading, setIsLoading] = useState(false)
   const [isLoadingSubmit, setIsLoadingSubmit] = useState(false)
 
-  const [titulo, setTitulo] = useState('')
   const [descricao, setDescricao] = useState('')
   const [dt_inicio, setDt_inicio] = useState('')
   const [dt_fim, setDt_fim] = useState('')
-  const [isAtivo, setIsAtivo] = useState(false)
   const [arquivo, setArquivo] = useState<File>()
   const [arquivo64, setArquivo64] = useState('')
 
@@ -52,12 +50,6 @@ const ModalBanner = ({
     toast.dismiss()
 
     let isInvalid = false
-    if (titulo.length < 1) {
-      toast.warn('Título do Banner não pode ser vazio', {
-        position: 'top-left',
-      })
-      isInvalid = true
-    }
 
     if (dt_inicio.length < 1) {
       toast.warn('Data de inicio não pode ser vazia', { position: 'top-left' })
@@ -69,7 +61,7 @@ const ModalBanner = ({
     }
 
     if (dt_inicio > dt_fim) {
-      toast.warn('Data de inicio nao pode ser maior que a data final', {
+      toast.warn('Data de inicio não pode ser maior que a data final', {
         position: 'top-left',
       })
       isInvalid = true
@@ -93,43 +85,13 @@ const ModalBanner = ({
       return
     }
 
-    const formData = new FormData()
-    formData.append('titulo', titulo)
-    formData.append('descricao', descricao)
-    formData.append('dt_inicio', dt_inicio)
-    formData.append('dt_fim', dt_fim)
-
-    if (!isEditModal) {
-      formData.append('is_ativo', '1')
-    } else {
-      formData.append('is_ativo', isAtivo ? '1' : '0')
-    }
-
-    if (arquivo) {
-      formData.append('banner', arquivo)
-    }
-    if (bannerId) {
-      formData.append('cod', bannerId.toString())
-    }
-
-    const result = await http
-      .post('/banners/', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      })
-      .then((e) => ({
-        data: e.data,
-        success: true,
-        error: null,
-        message: 'OK',
-      }))
-      .catch((e) => ({
-        data: null,
-        success: false,
-        error: e.response?.data,
-        message: e.response?.data || e.message,
-      }))
+    const result = await storeBanner({
+      data_vigencia_inicial: dt_inicio,
+      data_vigencia_final: dt_fim,
+      descricao,
+      arquivo: arquivo as unknown as string,
+      cod: Number(bannerId),
+    })
 
     if (result.success) {
       if (isEditModal) {
@@ -158,36 +120,20 @@ const ModalBanner = ({
 
   const onLoadBanner = async () => {
     if (bannerId) {
-      const query = await http
-        .get('/banners/' + bannerId)
-        .then((e) => ({
-          data: e.data,
-          success: true,
-          error: null,
-          message: 'OK',
-        }))
-        .catch((e) => ({
-          data: null,
-          success: false,
-          error: e.response?.data,
-          message: e.response?.data || e.message,
-        }))
+      const query = await findBannerByCod(bannerId)
 
       if (query.success) {
-        setTitulo(query.data!.titulo)
         setDescricao(query.data!.descricao)
-        setIsAtivo(query.data?.is_ativo ? true : false)
-        setDt_fim(formatDateForInput(query.data!.dt_fim))
-        setDt_inicio(formatDateForInput(query.data!.dt_inicio))
-        setArquivo64(query.data!.arquivo)
+        setDt_fim(formatDateForInput(query.data!.data_vigencia_final))
+        setDt_inicio(formatDateForInput(query.data!.data_vigencia_inicial))
+        setArquivo64(String(query.data?.arquivo))
       }
     }
   }
 
   const onCloseModal = () => {
-    setTitulo('')
     setDescricao('')
-    setIsAtivo(false)
+
     setIsOpenModal(false)
     setDt_fim('')
     setDt_inicio('')
@@ -216,7 +162,8 @@ const ModalBanner = ({
         reader.onloadend = () => {
           const base64 = reader.result as string
 
-          const base64WithoutPrefix = base64.split(',')[1]
+          const base64WithoutPrefix = base64
+          // .split(',')[1]
 
           setArquivo64(base64WithoutPrefix)
         }
@@ -225,7 +172,7 @@ const ModalBanner = ({
     }
 
     if (arquivo) {
-      getBase64Async()
+      void getBase64Async()
     }
   }, [arquivo])
 
@@ -248,18 +195,6 @@ const ModalBanner = ({
             <Loading />
           ) : (
             <Flex w={'100%'} p={1} gap={1} flexDir={'column'}>
-              <Flex w={'100%'} p={1} gap={1} flexDir={'column'}>
-                <Flex>
-                  <Text>Título</Text>
-                  <span style={{ color: 'red' }}>*</span>
-                </Flex>
-                <Input
-                  isDisabled={isLoadingSubmit}
-                  value={titulo}
-                  onChange={(e) => setTitulo(e.target.value)}
-                  type="text"
-                />
-              </Flex>
               <Flex w={'100%'} p={1} gap={1} flexDir={'column'}>
                 <Text>Descrição</Text>
                 <Input
@@ -317,11 +252,7 @@ const ModalBanner = ({
               </Flex>
               {arquivo64 && (
                 <Flex align={'center'} justify={'center'}>
-                  <Image
-                    src={`data:image/jpg;base64,${arquivo64}`}
-                    alt="banner"
-                    width={'80%'}
-                  />
+                  <Image src={`${arquivo64}`} alt="banner" width={'80%'} />
                 </Flex>
               )}
             </Flex>
