@@ -11,8 +11,6 @@ const PainelPageLazy = lazy(() => import('../pages/painel'))
 const AdminSettingslazy = lazy(() => import('../pages/admin/settings'))
 const UsersAdminLazy = lazy(() => import('../pages/admin/users'))
 const BannersAdminLazy = lazy(() => import('../pages/admin/banners'))
-const ServicesAdminLazy = lazy(() => import('../pages/admin/services'))
-const NoticiasAdminLazy = lazy(() => import('../pages/admin/noticias'))
 const DocumentosAdminLazy = lazy(() => import('../pages/admin/documentos'))
 const ClientesAdminLazy = lazy(() => import('../pages/admin/clientes'))
 
@@ -123,26 +121,6 @@ const RoutesAplication = () => {
             <Autenticate isAdmin>
               <Suspense fallback={<LoadingPage />}>
                 <BannersAdminLazy />
-              </Suspense>
-            </Autenticate>
-          }
-        />
-        <Route
-          path="/admin/settings/services"
-          element={
-            <Autenticate isAdmin>
-              <Suspense fallback={<LoadingPage />}>
-                <ServicesAdminLazy />
-              </Suspense>
-            </Autenticate>
-          }
-        />
-        <Route
-          path="/admin/settings/noticias"
-          element={
-            <Autenticate isAdmin>
-              <Suspense fallback={<LoadingPage />}>
-                <NoticiasAdminLazy />
               </Suspense>
             </Autenticate>
           }
