@@ -1,44 +1,43 @@
-import { lazy, Suspense } from 'react'
-import { Navigate, Route, Routes } from 'react-router'
+import { lazy, Suspense } from 'react';
+import { Navigate, Route, Routes } from 'react-router';
 
-import { useAuth } from '@/stores/auth-store'
-import LoginPage from '../pages/login'
-import LoadingPage from '../pages/loading'
-import NotFound from '../pages/not-found'
-import DashboardLayout from '../layout/dashboardLayout'
+import { useAuth } from '@/stores/auth-store';
+import LoginPage from '../pages/login';
+import LoadingPage from '../pages/loading';
+import NotFound from '../pages/not-found';
+import DashboardLayout from '../layout/dashboardLayout';
 
-const PainelPageLazy = lazy(() => import('../pages/painel'))
-const AdminSettingslazy = lazy(() => import('../pages/admin/settings'))
-const UsersAdminLazy = lazy(() => import('../pages/admin/users'))
-const BannersAdminLazy = lazy(() => import('../pages/admin/banners'))
-const DocumentosAdminLazy = lazy(() => import('../pages/admin/documentos'))
-const ClientesAdminLazy = lazy(() => import('../pages/admin/clientes'))
+const PainelPageLazy = lazy(() => import('../pages/painel'));
+const AdminSettingslazy = lazy(() => import('../pages/admin/settings'));
+const UsersAdminLazy = lazy(() => import('../pages/admin/users'));
+const BannersAdminLazy = lazy(() => import('../pages/admin/banners'));
+const ClientesAdminLazy = lazy(() => import('../pages/admin/clientes'));
+const EmpresasAdminLazy = lazy(() => import('../pages/admin/empresas'));
+const FinancialPageLazy = lazy(() => import('../pages/financial'));
 
-const FinancialPageLazy = lazy(() => import('../pages/financial'))
-
-const DashboardHomePageLazy = lazy(() => import('../pages/dashboard/home'))
+const DashboardHomePageLazy = lazy(() => import('../pages/dashboard/home'));
 
 type IProps = {
-  isAdmin?: boolean
-  children: JSX.Element
-}
+  isAdmin?: boolean;
+  children: JSX.Element;
+};
 
 const RoutesAplication = () => {
-  const { usuario, isAuthenticated, hydrated } = useAuth()
+  const { usuario, isAuthenticated, hydrated } = useAuth();
 
   if (!hydrated) {
-    return <LoadingPage />
+    return <LoadingPage />;
   }
   const Autenticate = ({ children, isAdmin }: IProps) => {
-    let errAccess = false
-    if (!isAuthenticated) errAccess = true
-    if (isAdmin && !usuario?.is_admin) errAccess = true
+    let errAccess = false;
+    if (!isAuthenticated) errAccess = true;
+    if (isAdmin && !usuario?.is_admin) errAccess = true;
 
     if (errAccess) {
-      return <Navigate to="/login" replace />
+      return <Navigate to="/login" replace />;
     }
-    return children
-  }
+    return children;
+  };
 
   return (
     <Routes>
@@ -96,11 +95,11 @@ const RoutesAplication = () => {
           }
         />
         <Route
-          path="/admin/settings/documentos"
+          path="/admin/settings/empresas"
           element={
             <Autenticate isAdmin>
               <Suspense fallback={<LoadingPage />}>
-                <DocumentosAdminLazy />
+                <EmpresasAdminLazy />
               </Suspense>
             </Autenticate>
           }
@@ -128,7 +127,7 @@ const RoutesAplication = () => {
       </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>
-  )
-}
+  );
+};
 
-export default RoutesAplication
+export default RoutesAplication;

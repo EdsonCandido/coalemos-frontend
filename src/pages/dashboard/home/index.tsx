@@ -8,6 +8,7 @@ import {
   Stack,
   Text,
 } from '@chakra-ui/react'
+import { FaArrowDown, FaArrowUp, FaMoneyBill } from 'react-icons/fa'
 
 const DashboardHomePage = () => {
   const onInit = () => {}
@@ -49,62 +50,65 @@ const DashboardHomePage = () => {
           justify={'space-between'}
           align={'center'}
         >
-          <Card size="md" boxShadow={'lg'} w={'100%'}>
-            <CardHeader>
-              <Heading
-                size="md"
-                fontSize={'md'}
-                fontWeight="400"
-                color="gray.500"
+          <Flex justify={'space-between'} align={'center'} w={'100%'} gap={5}>
+            <Card
+              size="md"
+              boxShadow={'lg'}
+              w={'100%'}
+              backgroundColor={'green.300'}
+            >
+              <CardHeader
+                display={'flex'}
+                gap={1}
+                style={{ alignItems: 'center' }}
               >
-                {' '}
-                Card - md
-              </Heading>
-            </CardHeader>
-            <CardBody color="fg.muted">adipiscing elit.</CardBody>
-          </Card>
-          <Card size="md" boxShadow={'lg'} w={'100%'}>
-            <CardHeader>
-              <Heading
-                size="md"
-                fontSize={'md'}
-                fontWeight="400"
-                color="gray.500"
+                <FaArrowDown color={'#fff'} />
+                <Heading
+                  size="xl"
+                  fontSize={'xl'}
+                  fontWeight="800"
+                  color="#fff"
+                  textTransform={'uppercase'}
+                >
+                  {' '}
+                  Entradas
+                </Heading>
+              </CardHeader>
+              <CardBody color="fg.muted">adipiscing elit.</CardBody>
+            </Card>
+            <Card
+              size="md"
+              boxShadow={'lg'}
+              w={'100%'}
+              backgroundColor={'red.300'}
+            >
+              <CardHeader
+                display={'flex'}
+                gap={1}
+                style={{ alignItems: 'center' }}
               >
-                {' '}
-                Card - md
-              </Heading>
-            </CardHeader>
-            <CardBody color="fg.muted">adipiscing elit.</CardBody>
-          </Card>
-          <Card size="md" boxShadow={'lg'} w={'100%'}>
-            <CardHeader>
-              <Heading
-                size="md"
-                fontSize={'md'}
-                fontWeight="400"
-                color="gray.500"
-              >
-                {' '}
-                Card - md
-              </Heading>
-            </CardHeader>
-            <CardBody color="fg.muted">adipiscing elit.</CardBody>
-          </Card>
-          <Card size="md" boxShadow={'lg'} w={'100%'}>
-            <CardHeader>
-              <Heading
-                size="md"
-                fontSize={'md'}
-                fontWeight="400"
-                color="gray.500"
-              >
-                {' '}
-                Card - md
-              </Heading>
-            </CardHeader>
-            <CardBody color="fg.muted">adipiscing elit.</CardBody>
-          </Card>
+                <FaArrowUp color={'#fff'} />
+                <Heading
+                  size="xl"
+                  fontSize={'xl'}
+                  fontWeight="800"
+                  color="#fff"
+                  textTransform={'uppercase'}
+                >
+                  {' '}
+                  Saídas
+                </Heading>
+              </CardHeader>
+              <CardBody color="fg.muted">adipiscing elit.</CardBody>
+            </Card>
+          </Flex>
+          <Flex
+            justify={'space-between'}
+            align={'center'}
+            w={'100%'}
+            gap={5}
+            border={'1px red solid'}
+          ></Flex>
         </Flex>
       </Stack>
     </Flex>
