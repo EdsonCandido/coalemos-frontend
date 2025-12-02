@@ -33,4 +33,14 @@ const findCompanies = async (): Promise<ApiResponse<tEmpresas[] | null>> => {
   return request;
 };
 
-export { finCompanyByCod, findCompanies };
+const changeActive = async (cod: number): Promise<ApiResponse<tEmpresas | null>> =>{
+  const request = await http.delete(BASE_ROUTER, {
+      params: {cod}
+    })
+  .then(e => ({ data: e.data, success: true, message: null}))
+    .catch((e) => ({data: null, success: false, message: e.response.data || e.message}));
+
+  return request;
+}
+
+export { finCompanyByCod, findCompanies, changeActive };
