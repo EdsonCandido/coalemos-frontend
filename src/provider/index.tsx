@@ -24,17 +24,13 @@ const AppProvider = ({ children }: ContextProviderProps) => {
   const setHydrated = useAuth((s) => s.setHydrated);
 
   useEffect(() => {
-    // ✅ Aguarda o Zustand terminar de reidratar
     useAuth.persist.onFinishHydration(() => {
       const accessToken = useAuth.getState().accessToken;
-      if (accessToken) {
-        // Reaplica o token ao axios
-        http.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-      }
+      if (accessToken) http.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+
       setHydrated(true);
     });
 
-    // Caso já tenha sido hidratado (em hot reloads)
     if (useAuth.persist.hasHydrated()) {
       setHydrated(true);
     }
