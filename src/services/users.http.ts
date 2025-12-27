@@ -1,7 +1,7 @@
-import { type tUsuarios, type ApiResponse } from "@/types/types";
-import { http } from "./http";
+import { type tUsuarios, type ApiResponse } from '@/types/types';
+import { http } from './http';
 
-const BASE_ROUTER = "/users";
+const BASE_ROUTER = '/users';
 
 const findUserAll = async (): Promise<ApiResponse<tUsuarios[] | null>> => {
   const request = await http
@@ -16,9 +16,7 @@ const findUserAll = async (): Promise<ApiResponse<tUsuarios[] | null>> => {
   return request;
 };
 
-const findUserById = async (
-  cod: number,
-): Promise<ApiResponse<tUsuarios | null>> => {
+const findUserById = async (cod: number): Promise<ApiResponse<tUsuarios | null>> => {
   const request = await http
     .get(BASE_ROUTER, {
       params: {
@@ -41,7 +39,7 @@ const storeUser = async ({
   nome,
   cod,
   cpf,
-  is_admin = false,
+  perfil = 'usuario',
   is_primeiro_acesso = false,
   senha = null,
 }: tUsuarios): Promise<ApiResponse<tUsuarios | null>> => {
@@ -51,7 +49,7 @@ const storeUser = async ({
     senha,
     nome,
     cod,
-    is_admin,
+    perfil,
     is_primeiro_acesso,
     foto_perfil,
   };
@@ -80,9 +78,7 @@ const validLogin = async (login: string): Promise<ApiResponse<boolean>> => {
   return request;
 };
 
-const changeActiveUser = async (
-  cod: number,
-): Promise<ApiResponse<null | tUsuarios>> => {
+const changeActiveUser = async (cod: number): Promise<ApiResponse<null | tUsuarios>> => {
   const request = await http
     .put(`${BASE_ROUTER}/${cod}`)
     .then((e) => ({ data: e.data, success: true, message: null }))
