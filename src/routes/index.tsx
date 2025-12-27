@@ -8,6 +8,7 @@ import NotFound from '../pages/not-found';
 import DashboardLayout from '../layout/dashboardLayout';
 
 const PainelPageLazy = lazy(() => import('../pages/painel'));
+const ClientesPageLazy = lazy(() => import('../pages/clients'));
 const AdminSettingslazy = lazy(() => import('../pages/admin/settings'));
 const UsersAdminLazy = lazy(() => import('../pages/admin/users'));
 const BannersAdminLazy = lazy(() => import('../pages/admin/banners'));
@@ -31,7 +32,7 @@ const RoutesAplication = () => {
   const Autenticate = ({ children, isAdmin }: IProps) => {
     let errAccess = false;
     if (!isAuthenticated) errAccess = true;
-    if (isAdmin && !usuario?.is_admin) errAccess = true;
+    if (isAdmin && !(usuario?.perfil == 'admin')) errAccess = true;
 
     if (errAccess) {
       return <Navigate to="/login" replace />;
@@ -70,6 +71,16 @@ const RoutesAplication = () => {
             <Autenticate isAdmin>
               <Suspense fallback={<LoadingPage />}>
                 <FinancialPageLazy />
+              </Suspense>
+            </Autenticate>
+          }
+        />
+        <Route
+          path="/clients"
+          element={
+            <Autenticate isAdmin>
+              <Suspense fallback={<LoadingPage />}>
+                <ClientesPageLazy />
               </Suspense>
             </Autenticate>
           }
