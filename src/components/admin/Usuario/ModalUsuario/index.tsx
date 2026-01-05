@@ -1,7 +1,7 @@
 import { toast } from 'react-toastify';
 import Loading from '../../../ui/Loading';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
-import { useDebounce } from '../../../../hooks/debounced';
+import { useDebounce } from '../../../../hooks/useDebounce';
 import { useEffect, useMemo, useState } from 'react';
 import {
   Button,
