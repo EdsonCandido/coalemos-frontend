@@ -13,6 +13,16 @@
   padding-top: 0;
   padding-bottom: 0;
 }
+
+/* DatePicker e demais Pickers */
+.rs-picker-date .rs-picker-toggle,
+.rs-picker-daterange .rs-picker-toggle,
+.rs-picker-time .rs-picker-toggle {
+  height: 40px;
+  min-height: 40px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
 /* .rs-picker-select .rs-picker-toggle,
 .rs-picker-select .rs-picker-toggle .rs-picker-toggle-value,
 .rs-picker-select .rs-picker-toggle .rs-picker-toggle-placeholder {
@@ -25,6 +35,10 @@
   min-height: 40px;
   padding-top: 0;
   padding-bottom: 0;
+}
+
+.rs-picker-popup {
+  z-index: 2000 !important;
 }
 
 *::-webkit-scrollbar {
