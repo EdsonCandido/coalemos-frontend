@@ -33,6 +33,23 @@ const findUserById = async (cod: number): Promise<ApiResponse<tUsuarios | null>>
   return request;
 };
 
+const searchUser = async (name: string): Promise<ApiResponse<tUsuarios[] | null>> => {
+  const request = await http
+    .get(`${BASE_ROUTER}/search`, {
+      params: {
+        name,
+      },
+    })
+    .then((e) => ({ data: e.data, success: true, message: null }))
+    .catch((e) => ({
+      data: null,
+      success: false,
+      message: e.response.data || e.message,
+    }));
+
+  return request;
+};
+
 const storeUser = async ({
   foto_perfil = null,
   login,
@@ -91,4 +108,4 @@ const changeActiveUser = async (cod: number): Promise<ApiResponse<null | tUsuari
   return request;
 };
 
-export { findUserById, findUserAll, storeUser, validLogin, changeActiveUser };
+export { findUserById, findUserAll, storeUser, validLogin, changeActiveUser, searchUser };

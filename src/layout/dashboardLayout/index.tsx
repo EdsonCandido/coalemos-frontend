@@ -31,7 +31,7 @@ import { AiOutlineUser } from 'react-icons/ai';
 import { GrMoney } from 'react-icons/gr';
 import { MdOutlineSpaceDashboard } from 'react-icons/md';
 import { useAuth } from '@/stores/auth-store';
-import { FaRegNewspaper, FaUsers } from 'react-icons/fa';
+import { FaRegNewspaper, FaUsers, FaRegCalendarAlt } from 'react-icons/fa';
 
 // import logoSvg from '../../assets/logo/AABB-azul.svg'
 // import logoSvgAmarela from '../../assets/logo/AABB-amarelo.svg'
@@ -84,6 +84,9 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
         </NavItem>
         <NavItem icon={GrMoney} path={'/financial'}>
           Financeiro
+        </NavItem>
+        <NavItem icon={FaRegCalendarAlt} path={'/appointments'}>
+          Agendamentos
         </NavItem>
         <NavItem icon={FiSettings} path={'/admin/settings'}>
           Configurações
